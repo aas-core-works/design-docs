@@ -64,10 +64,8 @@ Thus the users which use multiple languages can use the library effortlessly bet
 
 * The library should provide **import/export for JSON and XML**.
   Other formats such as AutomationML and RDF are not supported out-of-the-box.
-  However, adding imports and exports for additional formats should be straightforward, so that users can develop their own import/export libraries on the top.
-
-  We should explicitly track how much friction there is if the user wants to use RDF, AML or any other serialization format.
-
+  However, adding imports and exports for additional formats should be straightforward, so that users can develop their own import/export libraries on the top. 
+    * We should explicitly track how much friction there is if the user wants to use RDF, AML or any other serialization format.
     * For example, can the user just load an AASX and use RDF?
     * Is there a hook to set up so that the user can choose which serialization methods should be supported?
 
