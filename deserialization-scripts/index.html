@@ -141,18 +141,18 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="deserialization-scripts">De/serialization Scripts</h1>
+                <h1 id="deserialization-scripts">De/serialization Scripts<a class="headerlink" href="#deserialization-scripts" title="Permanent link">#</a></h1>
 <p>For many similar languages following the procedural paradigm, it is tedious to write the deserialization over and over again.
 For example, once we implemented the deserialization of JSON in C#, it will be most probably the same thing in Java, and very similar in Golang.</p>
 <p>(<em>2021-03-26: Functional languages are an exception here, but that is a problem we abstract away at the moment.</em>)</p>
 <p>Instead, we propose to specify the de-serialization and serialization in a meta-language as a <strong>de/serialization script</strong>.
 A de/serialization script is then <strong>transpiled</strong> by the <a href="../general-design-decisions/#code-generators">code generators</a> into the respective implementation of the library.</p>
-<h2 id="scripting-language">Scripting Language</h2>
+<h2 id="scripting-language">Scripting Language<a class="headerlink" href="#scripting-language" title="Permanent link">#</a></h2>
 <p>We use a subset of Python language to script the de/serialization.</p>
 <p>As the de/serialization scripts are not used by the wide audience, but only by the developers of the library, we intentionally decide on-the-go which Python features to support.
 Hence we only transpile a very limited subset of builtin functions and types.
 For example, we allow no nested functions, classes or context managers.</p>
-<h3 id="operations">Operations</h3>
+<h3 id="operations">Operations<a class="headerlink" href="#operations" title="Permanent link">#</a></h3>
 <p>Each <strong>de-serialization and serialization operation</strong> is given as a <strong>function</strong>.
 The function operates on a <code>jsonable</code>, the corresponding object to which the parsed data should be added and a path to the JSON-able.</p>
 <p>For example <code>parse_submodel_element</code>:</p>
@@ -162,17 +162,17 @@ The function operates on a <code>jsonable</code>, the corresponding object to wh
         path: pathlib.Path) -&gt; None:
     ...
 </code></pre>
-<h3 id="provided-commands-and-queries">Provided Commands and Queries</h3>
+<h3 id="provided-commands-and-queries">Provided Commands and Queries<a class="headerlink" href="#provided-commands-and-queries" title="Permanent link">#</a></h3>
 <p>It is assumed that the de/serialization script can <strong>access the operations and the data structures of our library</strong> (such as <code>Submodel</code> in the aforementioned example).</p>
 <p>Additionally, special commands and queries such as <code>is_int32</code>, <code>is_int64</code>, …, <code>as_int32</code>, <code>as_int64</code>, <code>as_float32</code>, <code>as_float64</code>, <code>as_list</code> and <code>as_map</code> are provided to implement the logic.
 Functions such as <code>x = local_int32(0)</code> are used to instantiate local variables.
 These special commands and queries are implemented in a separate module, say, <code>aasx_core_gen.de_serialization</code>.</p>
-<h3 id="supported-language-constructs">Supported Language Constructs</h3>
+<h3 id="supported-language-constructs">Supported Language Constructs<a class="headerlink" href="#supported-language-constructs" title="Permanent link">#</a></h3>
 <p>For-loops can loop either over lists, over maps or over <code>for _ in range(..., ...)</code> where both start and end are given as integers.</p>
-<h3 id="error-messages">Error Messages</h3>
+<h3 id="error-messages">Error Messages<a class="headerlink" href="#error-messages" title="Permanent link">#</a></h3>
 <p>The errors should be reported using pre-defined functions <code>error(message: str, path: pathlib.Path)</code>.</p>
 <p>The messages should use <a href="https://docs.python.org/3/library/stdtypes.html#old-string-formatting">old string formatting</a> to allow for easier transpilation to languages such as C++ and Golang.</p>
-<h3 id="include-markers">Include Markers</h3>
+<h3 id="include-markers">Include Markers<a class="headerlink" href="#include-markers" title="Permanent link">#</a></h3>
 <p>Since we only provide a transpilation based on a subset of Python language, many operations will have to include manually defined code snippets.
 The developer should mark such spots with <a href="../general-design-decisions/#include-markers">include markers</a> using <code>NotImplementedError</code>.
 For example:</p>
@@ -180,7 +180,7 @@ For example:</p>
 </code></pre>
 <p>will make the <a href="../general-design-decisions/#code-generators">code generators</a> introduce an include marker <code>some-marker</code> in the generated code.
 The <a href="../general-design-decisions/#filler-script">filler script</a> will eventually replace the <a href="../general-design-decisions/#include-markers">include markers</a> with the corresponding code snippets written in the implementation language.</p>
-<h2 id="relation-to-json-schema-and-xml-schema-definition">Relation to <a href="https://json-schema.org/">JSON Schema</a> and <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a></h2>
+<h2 id="relation-to-json-schema-and-xml-schema-definition">Relation to <a href="https://json-schema.org/">JSON Schema</a> and <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a><a class="headerlink" href="#relation-to-json-schema-and-xml-schema-definition" title="Permanent link">#</a></h2>
 <p>We should write a separate code generator to bootstrap this scripting code based on a schema (<em>e.g.</em>, a <a href="https://json-schema.org/">JSON Schema</a>), but the schema should not be referenced in the meta-model nor available directly in code.
 There are two reasons for this decision:</p>
 <ul>
@@ -199,8 +199,8 @@ There are two reasons for this decision:</p>
 For example, we could use the bootstrapping code generator to re-generate the code based on the new schema and inspect the changes with the <a href="https://en.wikipedia.org/wiki/Diff">diff</a> tool.
 This is clearly tedious, but we found no easy way around it.</p>
 <p><img alt="Workflow" src="workflow.svg" /></p>
-<h2 id="implementation-considerations">Implementation Considerations</h2>
-<h3 id="error-logging">Error logging</h3>
+<h2 id="implementation-considerations">Implementation Considerations<a class="headerlink" href="#implementation-considerations" title="Permanent link">#</a></h2>
+<h3 id="error-logging">Error logging<a class="headerlink" href="#error-logging" title="Permanent link">#</a></h3>
 <p>Error logging is more involved than it seems at first.
 We probably need to cap the maximum number of errors — once the error log is full, the parsing should be immediately stopped.
 This can be implemented by passing an <code>ErrorLog</code> to <code>parse_*</code> functions.
@@ -208,7 +208,7 @@ As error logs are capped, the generated code should automatically check for avai
 This might also have implications on efficiency — but so do exceptions and stack unwinding!</p>
 <p>We might consider making two variants of <code>parse_*</code> functions — one with ErrorLog and one without (which raises the exceptions).
 The latter, which raises the exceptions, uses the first variant and passes an <code>ErrorRaiser</code> (or <code>ErrorThrower</code>, depending on the language) as <code>ErrorLog</code>.</p>
-<h3 id="bugs-with-floats-and-integers">Bugs with Floats and Integers</h3>
+<h3 id="bugs-with-floats-and-integers">Bugs with Floats and Integers<a class="headerlink" href="#bugs-with-floats-and-integers" title="Permanent link">#</a></h3>
 <p>JSON specifies that all numbers (both integers and floats) are given as 64-bit floating point numbers (see <a href="https://github.com/grpc-ecosystem/grpc-gateway/issues/438#issuecomment-330742999">this comment on a GitHub issue</a>).
 Most JSON libraries will thus handle all numbers as 64-bit floats.
 This can lead to hard-to-spot bugs when the files are deserialized.</p>
@@ -241,10 +241,10 @@ func main() {
 For example, if we are serializing an 64-bit integer to JSON, we need to ensure that it is less-equal 2^52 (see again <a href="https://github.com/grpc-ecosystem/grpc-gateway/issues/438#issuecomment-330742999">this comment on a GitHub issue</a>).</p>
 <p>While the issue seems rare and irrelevant, that is not the case in the practice.
 All data structures that involve unique identifiers given as 64-bit integer numbers will exhibit the bug if they do not increment the identifiers consecutively, but generate random 64-bit identifiers.</p>
-<h3 id="functional-languages">Functional languages</h3>
+<h3 id="functional-languages">Functional languages<a class="headerlink" href="#functional-languages" title="Permanent link">#</a></h3>
 <p>We probably don't need a different scripting language for purely functional languages, but we need to think hard about it.
 At this stage, let us cover the procedural languages, and then think about how we can generate code for functional languages, and observe only then what walls we hit.</p>
-<h3 id="debugging">Debugging</h3>
+<h3 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">#</a></h3>
 <p>There should be a flag in the <a href="../general-design-decisions/#code-generators">code generators</a> to allow for inclusion of the original scripts in the generated code as comments.
 Thus the generated code is easier to trace and double-check.</p>
               

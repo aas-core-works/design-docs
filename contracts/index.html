@@ -123,7 +123,7 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="code-contracts">Code Contracts</h1>
+                <h1 id="code-contracts">Code Contracts<a class="headerlink" href="#code-contracts" title="Permanent link">#</a></h1>
 <p>The specification of <a href="../data-structures-and-operations/#operations">operations</a> in our <a href="../general-design-decisions/#meta-model">meta-model</a> should include the <a href="https://en.wikipedia.org/wiki/Design_by_contract">code contracts</a> such as pre-conditions and post-conditions.</p>
 <p>The contracts can be trivial (such as specifying a range of a property), as well as very complex expressions (the length of this list needs to be divisble by three and the first element needs to be larger than the sum of all the other elements).</p>
 <p>The <a href="../general-design-decisions/#code-generators">code generators</a> transpile contracts so that they are <strong>included in the implementation</strong>.
@@ -139,15 +139,15 @@ This has the following benefits:
   Moreover, the documentation in human language tends to "rot", while contracts are continuously and automatically verified in testing or in production.</p>
 </li>
 </ul>
-<h2 id="definition-of-contracts">Definition of Contracts</h2>
+<h2 id="definition-of-contracts">Definition of Contracts<a class="headerlink" href="#definition-of-contracts" title="Permanent link">#</a></h2>
 <p>The contracts are written in <a href="https://www.w3.org/TR/shacl/">SHACL</a> and transpiled by <a href="../general-design-decisions/#code-generators">code generators</a> into the implementation stubs..</p>
 <p>As we could <strong>not support invariants</strong> in most languages, we decide to define contracts as <strong>pre-conditions</strong> and <strong>post-conditions</strong> of <strong><a href="../data-structures-and-operations/#operations">operations</a></strong>.</p>
 <p>Each contract should be given <strong>a unique identifier</strong>.</p>
-<h3 id="error-messages">Error Messages</h3>
+<h3 id="error-messages">Error Messages<a class="headerlink" href="#error-messages" title="Permanent link">#</a></h3>
 <p>The contracts should also include <strong>an error message</strong>.
 The error message should support <a href="https://en.wikipedia.org/wiki/Printf_format_string">printf format strings</a> so that we can include the actual offending values in the message as well.
 This is important for contracts which are enforced <strong>in production</strong> catching <strong>rare and hard-to-reproduce bugs</strong>.</p>
-<h3 id="severity">Severity</h3>
+<h3 id="severity">Severity<a class="headerlink" href="#severity" title="Permanent link">#</a></h3>
 <p>Each contract is given a  <strong>severity</strong> which determines when it is enforced:</p>
 <ul>
 <li><code>ALWAYS</code>, always enforced, including in production,</li>
@@ -158,7 +158,7 @@ This is important for contracts which are enforced <strong>in production</strong
   This allows us to enforce contracts with exploding computational complexity.</li>
 </ul>
 <p>For example, most post-conditions have the severity <code>DEBUG</code>.</p>
-<h2 id="contracts-and-serialization">Contracts and Serialization</h2>
+<h2 id="contracts-and-serialization">Contracts and Serialization<a class="headerlink" href="#contracts-and-serialization" title="Permanent link">#</a></h2>
 <p>The contracts are a tool for improving the <a href="https://en.wikipedia.org/wiki/Correctness_(computer_science)">correctness</a> of the code.
 They are not meant to be used as validation of the input (<em>e.g.</em>, a JSON file to be imported).</p>
 <p>In our setting, this means that the validation of the input is part of the <a href="../deserialization-scripts/">deserialization scripts</a>.

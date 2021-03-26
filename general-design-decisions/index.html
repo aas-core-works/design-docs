@@ -133,17 +133,17 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="general-design-decisions">General Design Decisions</h1>
-<h2 id="mission">Mission</h2>
+                <h1 id="general-design-decisions">General Design Decisions<a class="headerlink" href="#general-design-decisions" title="Permanent link">#</a></h1>
+<h2 id="mission">Mission<a class="headerlink" href="#mission" title="Permanent link">#</a></h2>
 <p>We want to provide a library for manipulating the static information of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> with a unified interface and implementations in many programming languages.</p>
-<h2 id="scope">Scope</h2>
+<h2 id="scope">Scope<a class="headerlink" href="#scope" title="Permanent link">#</a></h2>
 <p>The library covers the data model of the shell and its serialization.</p>
 <p>We aim to implement the library at the level of quality <strong>ready for production</strong>.</p>
 <p>We embrace <strong>stability</strong> and <strong>long-term support</strong> instead of  <strong>experimental features</strong>.</p>
 <p>The library should be <strong>minimalistic</strong> (as opposed to large  enterprise systems).</p>
 <p>The library should provide base for a rich <strong>toolkit</strong> built on top of it.
 For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.</p>
-<h2 id="out-of-scope">Out-of-Scope</h2>
+<h2 id="out-of-scope">Out-of-Scope<a class="headerlink" href="#out-of-scope" title="Permanent link">#</a></h2>
 <ul>
 <li>The <strong>component manager</strong>, the "active" part of the shell, is out-of-scope.<br>
   <br>
@@ -162,7 +162,7 @@ For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.</p>
   <br>
   The library should provide basic quering through dedicated operations based on the existing implementations, such as the data model of the <a href="https://github.com/admin-shell-io/aasx-package-explorer">AASX Package Explorer</a>.</li>
 </ul>
-<h2 id="requirements">Requirements</h2>
+<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">#</a></h2>
 <ul>
 <li>The library should be provided in <strong>many programming languages</strong>.<br>
   <br></li>
@@ -232,13 +232,13 @@ For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.</p>
   <br>
   The library will be used in large batches as well as servers which need to have large throughput.</li>
 </ul>
-<h2 id="development-workflow">Development Workflow</h2>
+<h2 id="development-workflow">Development Workflow<a class="headerlink" href="#development-workflow" title="Permanent link">#</a></h2>
 <p>We write a <a href="#meta-model">meta-model</a> once and generate code stubs for the individual languages using <a href="#code-generators">code generators</a>.
 The developer fills in the stubs manually.</p>
 <p>This allows us to scale fast between languages.
 Additionally, when the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> changes, the <a href="#meta-model">meta-model</a> allows us to react much faster.</p>
 <p><img alt="Workflow Overview" src="workflow-overview.svg" /></p>
-<h2 id="meta-model">Meta-model</h2>
+<h2 id="meta-model">Meta-model<a class="headerlink" href="#meta-model" title="Permanent link">#</a></h2>
 <p>The meta-model is written in <a href="https://www.w3.org/TR/shacl/">RDF SHACL</a>.</p>
 <p>The meta-model specifies:</p>
 <ul>
@@ -249,7 +249,7 @@ Additionally, when the specification of the <a href="https://www.plattform-i40.d
 <p>Schemas such as <a href="https://json-schema.org/">JSON Schema</a> and <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a> are not powerful enough as we can not specify the operations and corresopnding contracts.</p>
 <p>The meta-model needs to allow for something akin to <a href="https://en.wikipedia.org/wiki/Trait_(computer_programming)">traits</a>,  <a href="https://en.wikipedia.org/wiki/Mixin">mixins</a> or <a href="https://en.wikipedia.org/wiki/Multiple_inheritance">multiple inheritance</a> so that common structures are re-used.
 For example, <code>Identifiable</code> is one such trait which is used throughout the meta-model.</p>
-<h2 id="code-generators">Code generators</h2>
+<h2 id="code-generators">Code generators<a class="headerlink" href="#code-generators" title="Permanent link">#</a></h2>
 <p>We develop a code generator for each programming language separately.
 A code generator takes the <a href="#meta-model">meta-model</a> as input and generates the stub of the library:</p>
 <ul>
@@ -257,14 +257,14 @@ A code generator takes the <a href="#meta-model">meta-model</a> as input and gen
 <li>A code generator <strong>transpiles</strong> the <a href="../contracts/">contracts</a> as well as [JSON de/serialization scripts] to the corresponding implementation language.</li>
 </ul>
 <p>The developer needs to fill in the stubs to finalize the library.</p>
-<h3 id="include-markers">Include Markers</h3>
+<h3 id="include-markers">Include Markers<a class="headerlink" href="#include-markers" title="Permanent link">#</a></h3>
 <p>The generated stubs contain <strong>include markers</strong> which specify parts of the code that need to be filled in.
 <a name="filler-script"></a>
 A <strong>filler script</strong> is provided to replace the include markers with the corresponding code snippets.</p>
 <p>Each include marker is globally uniquely identified.</p>
 <p><img alt="Include markers" src="include-markers.svg" /></p>
 <p>(<em>mristin 2021-03-26: It remains to be seen if we need a filler script per language, or one for the whole library.</em>)</p>
-<h2 id="versioning">Versioning</h2>
+<h2 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">#</a></h2>
 <p>The base name is <code>aasx-core</code>.</p>
 <p>We use the schema:</p>
 <pre><code>aasx-core{AAS version}-{language version}-{optional runtime version}
