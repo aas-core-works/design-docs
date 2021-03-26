@@ -1,0 +1,36 @@
+digraph G {
+    meta_model [label="Meta-model", shape=note ]
+    
+    csharp_code_generator [label="C# code generator", shape=box ]
+    
+    csharp_stubs [label=< Stubs in C#<br/>with C#-specific include markers >, shape=note ];
+
+    csharp_snippets [ label=< Snippets in C# >, shape=note ]
+    
+    csharp_filler_script [ label="Filler script", shape=box ]
+    
+    csharp_implementation [ label="C# implementation", shape=note ]
+    
+    java_code_generator [label="Java code generator", shape=box ]
+    
+    java_stubs [label=< Stubs in Java<br/>with Java-specific include markers >, shape=note ];
+
+    java_snippets [ label=< Snippets in Java >, shape=note ]
+    
+    java_filler_script [ label="Filler script", shape=box ]
+    
+    java_implementation [ label="Java implementation", shape=note ]
+
+    meta_model -> csharp_code_generator
+    csharp_code_generator -> csharp_stubs
+    csharp_stubs -> csharp_filler_script
+    csharp_snippets -> csharp_filler_script
+    csharp_filler_script -> csharp_implementation
+
+    meta_model -> java_code_generator
+    java_code_generator -> java_stubs
+    java_stubs -> java_filler_script
+    java_snippets -> java_filler_script
+    java_filler_script -> java_implementation
+}
+

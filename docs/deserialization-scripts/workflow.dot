@@ -1,0 +1,37 @@
+digraph G {
+    json_schema [label=< "Official" JSON schema >, shape=note];
+
+    bootstrapping_script [label="Bootstrapping script", shape=box];
+
+    initial_deserialization_script [label="Initial deserialization script", shape=note]
+
+    initial_serialization_script [label="Initial serialization script", shape=note]
+
+    refined_deserialization_script [label="Refined deserialization script", shape=note]
+    
+    refined_serialization_script [label="Refined serialization script", shape=note]
+
+    csharp_code_generator [label="C# code generator", shape=box ]
+    csharp_stubs [label=< Stubs in C#<br/>with C#-specific include markers >, shape=note ];
+
+    java_code_generator [label="Java code generator", shape=box ]
+    java_stubs [label=< Stubs in Java<br/>with Java-specific include markers >, shape=note ];
+
+    json_schema -> bootstrapping_script
+
+    bootstrapping_script -> initial_deserialization_script [label="  automatically"]
+    bootstrapping_script -> initial_serialization_script [label="  automatically"]
+    
+    initial_deserialization_script -> refined_deserialization_script [label="  manually"]
+    initial_serialization_script -> refined_serialization_script [label="  manually"]
+
+    refined_deserialization_script -> csharp_code_generator
+    refined_serialization_script -> csharp_code_generator
+    
+    refined_deserialization_script -> java_code_generator
+    refined_serialization_script -> java_code_generator
+
+    csharp_code_generator -> csharp_stubs [label="  automatically"]
+
+    java_code_generator -> java_stubs [label="  automatically"]
+}

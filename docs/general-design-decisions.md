@@ -166,7 +166,7 @@ A **filler script** is provided to replace the include markers with the correspo
 
 Each include marker is globally uniquely identified.
 
-TODO (mristin, 2021-03-26): Draw a diagram here meta-model 🠒 code generator 🠒 stubs 🠒 filler (with snippets as inputs); DRAW ON PAPER FIRST!
+![Include markers](general-design-decisions/include-markers.svg)
 
 (*mristin 2021-03-26: It remains to be seen if we need a filler script per language, or one for the whole library.*)
 

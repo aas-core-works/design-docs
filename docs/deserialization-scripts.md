@@ -89,9 +89,11 @@ When the "official" schema changes, we need to manually update our code.
 For example, we could use the bootstrapping code generator to re-generate the code based on the new schema and inspect the changes with the [diff] tool.
 This is clearly tedious, but we found no easy way around it.
 
-TODO (mristin, 2021-03-26): Draw a diagram to show how the workflow looks like
-
 [diff]: https://en.wikipedia.org/wiki/Diff
+
+
+![Workflow](deserialization-scripts/workflow.svg)
+
 
 ## Implementation Considerations
 

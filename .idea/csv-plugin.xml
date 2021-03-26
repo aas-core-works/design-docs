@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\docs\general-design-decisions\include_markers.dot">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\docs\index.md">
           <value>
             <Attribute>
