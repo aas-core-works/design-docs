@@ -54,11 +54,31 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">General Design Decisions</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#mission">Mission</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scope">Scope</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#out-of-scope">Out-of-Scope</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#development-workflow">Development Workflow</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#meta-model">Meta-model</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#code-generators">Code generators</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#include-markers">Include Markers</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#versioning">Versioning</a>
+    </li>
     </ul>
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../operations/">Operations</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../data-structures-and-operations/">Data Structures and Operations</a>
                     </li>
                 </ul>
                 <ul>
@@ -66,7 +86,15 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../json-deserialization/">JSON de/serialization</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../deserialization-scripts/">De/serialization Scripts</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../naming-conventions/">Naming Conventions</a>
                     </li>
                 </ul>
                 <ul>
@@ -106,7 +134,145 @@
             <div class="section">
               
                 <h1 id="general-design-decisions">General Design Decisions</h1>
-<p>TODO: marko</p>
+<h2 id="mission">Mission</h2>
+<p>We want to provide a library for manipulating the static information of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> with a unified interface and implementations in many programming languages.</p>
+<h2 id="scope">Scope</h2>
+<p>The library covers the data model of the shell and its serialization.</p>
+<p>We aim to implement the library at the level of quality <strong>ready for production</strong>.</p>
+<p>We embrace <strong>stability</strong> and <strong>long-term support</strong> instead of  <strong>experimental features</strong>.</p>
+<p>The library should be <strong>minimalistic</strong> (as opposed to large  enterprise systems).</p>
+<p>The library should provide base for a rich <strong>toolkit</strong> built on top of it.
+For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.</p>
+<h2 id="out-of-scope">Out-of-Scope</h2>
+<ul>
+<li>The <strong>component manager</strong>, the "active" part of the shell, is out-of-scope.</li>
+</ul>
+<p>This is the responsability of other components such as <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a>.</p>
+<ul>
+<li>The <strong>thread-safe operations</strong> and <strong>ACID transactions</strong> are out-of-scope.</li>
+</ul>
+<p>The locking as well as write-ahead logs are left to the user.
+  A different library, aasx-db (yet to be created), will provide such functionality.</p>
+<ul>
+<li>We expect the data model of an <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> to <strong>fit in memory</strong>.</li>
+</ul>
+<p>Otherwise, components such as <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a> and aasx-db (yet to be created) should be used.</p>
+<ul>
+<li>Since <strong>query language</strong> has not been standardized yet, we will not implement it at this point (March 2021).</li>
+</ul>
+<p>The library should provide basic quering through dedicated operations based on the existing implementations, such as the data model of the <a href="https://github.com/admin-shell-io/aasx-package-explorer">AASX Package Explorer</a>.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>
+<p>The library should be provided in <strong>many programming languages</strong>.</p>
+</li>
+<li>
+<p>We aim for <strong>unified interface</strong> shared between the languages.
+Thus the users which use multiple languages can use the library effortlessly between them, as the interface remains familiar.</p>
+</li>
+<li>
+<p>The <strong>main user base</strong> are the developers working on <strong>stable production systems</strong>.
+  However, the library should be <strong>flexible enough</strong> to allow <strong>experimenters</strong> to use it in their experimental code bases.</p>
+</li>
+<li>
+<p>Certain <strong>patterns</strong> should be supported out-of-the-box.
+  For example, code for visitors and transformers should be included.</p>
+</li>
+<li>
+<p>The library should <strong>minimize the dependencies</strong> to avoid the dependency hell and be runnable on as many systems as possible.</p>
+</li>
+<li>
+<p>The implementations should be in <strong>native code</strong> (instead of wrapping, say, C++ code).
+ This allows language-specific power features such as reflection.</p>
+</li>
+<li>
+<p>The library should provide read/write operations on <strong>AASX files</strong>.
+  This means that blobs and packaged files should be readable/writable, but no additional features on the blobs should be made available.</p>
+</li>
+<li>
+<p>The library should provide <strong>import/export for JSON and XML</strong>.
+  Other formats such as AutomationML and RDF are not supported out-of-the-box.
+  However, adding imports and exports for additional formats should be straightforward, so that users can develop their own import/export libraries on the top.</p>
+</li>
+</ul>
+<p>We should explicitly track how much friction there is if the user wants to use RDF, AML or any other serialization format.</p>
+<pre><code>* For example, can the user just load an AASX and use RDF?
+* Is there a hook to set up so that the user can choose which serialization methods should be supported?
+</code></pre>
+<ul>
+<li>
+<p>The generated code should allow for <strong>static analysis</strong> as much as possible.
+  For example, <a href="https://en.wikipedia.org/wiki/Nullable_type">Nullable types</a> should be used wherever appropriate.</p>
+</li>
+<li>
+<p>We should support <strong>wide range of computer architectures</strong>.
+  For example, we need to support <a href="https://www.mono-project.com/">Mono</a> in C# so that the library can run on ARM32 machines.
+  This is important as embedded systems often run on such machines.</p>
+</li>
+<li>
+<p>We need to support the <strong>Environment (multiple shells)</strong>, but not the shell repository.</p>
+</li>
+</ul>
+<p>You should be able to implement the repository using our library, but our library does not care about the repository.</p>
+<ul>
+<li>We <strong>postpone</strong> the discussion about <strong>the middlewares</strong>.</li>
+</ul>
+<p>For example, it would be practical if we allowed for a middleware to resolve ecl@ss automatically.
+  However, this is not trivial and we leave this out at the moment (2021-03-26).</p>
+<ul>
+<li>The user <strong>should not use constructors</strong> to create objects.</li>
+</ul>
+<p>We want to keep migrations between aasx-core and aasx-db (its thread-safe pendant based on transactions) as effortless as possible.
+  Since aasx-db is an <em>object-oriented database</em>, it needs to keep track of the objects and their state.
+  Therefore, constructors need to be handled through factory methods to prepare for a future migration to aasx-db.</p>
+<ul>
+<li><strong>Computational efficiency</strong> is important.
+  The library will be used in large batches as well as servers which need to have large throughput.</li>
+</ul>
+<h2 id="development-workflow">Development Workflow</h2>
+<p>We write a <a href="#meta-model">meta-model</a> once and generate code stubs for the individual languages using <a href="#code-generators">code generators</a>.
+The developer fills in the stubs manually.</p>
+<p>This allows us to scale fast between languages.
+Additionally, when the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> changes, the <a href="#meta-model">meta-model</a> allows us to react much faster.</p>
+<p><img alt="Workflow Overview" src="workflow-overview.svg" /></p>
+<h2 id="meta-model">Meta-model</h2>
+<p>The meta-model is written in <a href="https://www.w3.org/TR/shacl/">RDF SHACL</a>.</p>
+<p>The meta-model specifies:
+* <a href="../data-structures-and-operations/">Data Structures and Operations</a>,
+* <a href="../contracts/">Contracts</a> of the operations, and
+* <a href="../deserialization-scripts/">De/serialization scripts</a>.</p>
+<p>Schemas such as <a href="https://json-schema.org/">JSON Schema</a> and <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a> are not powerful enough as we can not specify the operations and corresopnding contracts.</p>
+<p>The meta-model needs to allow for something akin to <a href="https://en.wikipedia.org/wiki/Trait_(computer_programming)">traits</a>,  <a href="https://en.wikipedia.org/wiki/Mixin">mixins</a> or <a href="https://en.wikipedia.org/wiki/Multiple_inheritance">multiple inheritance</a> so that common structures are re-used.
+For example, <code>Identifiable</code> is one such trait which is used throughout the meta-model.</p>
+<h2 id="code-generators">Code generators</h2>
+<p>We develop a code generator for each programming language separately.
+A code generator takes the <a href="#meta-model">meta-model</a> as input and generates the stub of the library:
+* A code generator <strong>generates</strong> the interfaces and data structures based on the meta-model.
+* A code generator <strong>transpiles</strong> the <a href="../contracts/">contracts</a> as well as [JSON de/serialization scripts] to the corresponding implementation language.</p>
+<p>The developer needs to fill in the stubs to finalize the library.</p>
+<h3 id="include-markers">Include Markers</h3>
+<p>The generated stubs contain <strong>include markers</strong> which specify parts of the code that need to be filled in.
+<a name="filler-script"></a>
+A <strong>filler script</strong> is provided to replace the include markers with the corresponding code snippets.</p>
+<p>Each include marker is globally uniquely identified.</p>
+<p>TODO (mristin, 2021-03-26): Draw a diagram here meta-model 🠒 code generator 🠒 stubs 🠒 filler (with snippets as inputs); DRAW ON PAPER FIRST!</p>
+<p>(<em>mristin 2021-03-26: It remains to be seen if we need a filler script per language, or one for the whole library.</em>)</p>
+<h2 id="versioning">Versioning</h2>
+<p>The base name is <code>aasx-core</code>.</p>
+<p>We use the schema:</p>
+<pre><code>aasx-core{AAS version}-{language version}-{optional runtime version}
+</code></pre>
+<p>For example:
+* <code>aasx-core2-java15</code> is the aasx-core library supporting the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> version 2 and Java 15.
+* Analogously, <code>aasx-core3-csharp8-dotnet5</code> is the aasx-core library supporting the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> version 3, C# version 8 and the runtime .NET 5.</p>
+<p>We follow <a href="http://semver.org/spec/v1.0.0.html">Semantic Versioning</a> for the versioning of the library.
+The version X.Y.Z indicates:</p>
+<ul>
+<li>X is the major version (backward-incompatible),</li>
+<li>Y is the minor version (backward-compatible), and</li>
+<li>Z is the patch version (backward-compatible bug fix).</li>
+</ul>
+<p>Here is an example of a full identifier: <code>aasx-core5-python38 1.43.4</code>.</p>
               
             </div>
           </div>
@@ -114,7 +280,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../operations/" class="btn btn-neutral float-right" title="Operations">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../data-structures-and-operations/" class="btn btn-neutral float-right" title="Data Structures and Operations">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -146,7 +312,7 @@
         <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../operations/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../data-structures-and-operations/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

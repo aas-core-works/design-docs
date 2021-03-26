@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Testing - Design Docs for aasx-core</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Testing";
+    var mkdocs_page_input_path = "testing.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Design Docs for aasx-core</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../general-design-decisions/">General Design Decisions</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../data-structures-and-operations/">Data Structures and Operations</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Code Contracts</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../deserialization-scripts/">De/serialization Scripts</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Testing</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#test-for-identity">Test for Identity</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#manual-test-cases">Manual Test Cases</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#generated-test-cases">Generated Test Cases</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#valid">Valid</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#invalid-wrt-schema">Invalid w.r.t. Schema</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#invalid-wrt-meta-model">Invalid w.r.t. Meta-model</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test-sets">Test Sets</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../naming-conventions/">Naming Conventions</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../roadmap/">Roadmap</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Design Docs for aasx-core</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Testing</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="testing">Testing</h1>
+<h2 id="test-for-identity">Test for Identity</h2>
+<p>To establish the correctness of the de-serialization, contracts and serialization, we test for identity.
+The serialization of the de-serialization of an input should give you the very same input.
+ Formally:
+ <code>serialize(deserialize(input)) == input</code></p>
+<p>All valid test cases should satisfy this property.</p>
+<p>All invalid test cases should report one or more errors in the test.</p>
+<h2 id="manual-test-cases">Manual Test Cases</h2>
+<p>We collect different test cases as JSON and XML files.
+The test cases include multiple examples of:
+* File represents a valid shell,
+* File is invalid according to the schema,
+* File is valid according to the schema, but represents an invalid shell.</p>
+<p>We also need special test cases to account for <a href="../deserialization-scripts/#bugs-with-floats-and-integers">bugs related to how JSON handles numbers</a>.</p>
+<h2 id="generated-test-cases">Generated Test Cases</h2>
+<p>Manually constructing shells is tedious and we will almost certainly miss many edge cases.
+Therefore we turn to automatic generation of test cases to increase the test coverage.</p>
+<h3 id="valid">Valid</h3>
+<p>We script the generation of valid cases in Python by using <a href="https://hypothesis.readthedocs.io/en/latest/">Hypothesis</a> library and serialize the generated shells to JSON and XML (using our library).</p>
+<h3 id="invalid-wrt-schema">Invalid w.r.t. Schema</h3>
+<p>We randomly erase required parts or flip the types of the JSON schema.
+ Using such a defect JSON schema we generate the invalid data automatically by sampling with <a href="https://pypi.org/project/hypothesis-jsonschema/">hypothesis-jsonschema</a>.
+This generates the cases which are invalid with respect to schema.</p>
+<h3 id="invalid-wrt-meta-model">Invalid w.r.t. Meta-model</h3>
+<p>Automatically generating cases which are valid according to the schema, but invalid w.r.t. meta-model is hard as we can never be sure of the correctness of our de-serialization and contracts.</p>
+<p>Therefore we generate JSON data using <a href="https://pypi.org/project/hypothesis-jsonschema/">hypothesis-jsonschema</a> and manually inspect the failing examples.
+This will help us debug our de-serialization and contracts a bit.</p>
+<p>Since inspecting the passing examples is too laborious, we consciously miss all false positives (invalid shell, but passed de-serialization and contracts).
+We hope that manually constructed test cases make up for this deficiency in automatically generated cases.</p>
+<h2 id="test-sets">Test Sets</h2>
+<p>Depending on the maturity of the change, we use different test sets:</p>
+<ul>
+<li>
+<p><strong>Small</strong>, on every <strong>commit</strong>. 
+  A selected suit of manual test cases + 100 auto-generated ones.</p>
+</li>
+<li>
+<p><strong>Medium</strong>, on every alpha release. 
+  All manual test cases + 1000 auto-generated ones.</p>
+</li>
+<li>
+<p><strong>Large</strong>, on every release. 
+  All manual test cases + 1,000,000 auto-generated ones.</p>
+</li>
+</ul>
+<p>The auto-generated tests are generated only once and "frozen".</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../naming-conventions/" class="btn btn-neutral float-right" title="Naming Conventions">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../deserialization-scripts/" class="btn btn-neutral" title="De/serialization Scripts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../deserialization-scripts/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../naming-conventions/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

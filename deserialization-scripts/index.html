@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>De/serialization Scripts - Design Docs for aasx-core</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "De/serialization Scripts";
+    var mkdocs_page_input_path = "deserialization-scripts.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Design Docs for aasx-core</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../general-design-decisions/">General Design Decisions</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../data-structures-and-operations/">Data Structures and Operations</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Code Contracts</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">De/serialization Scripts</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#scripting-language">Scripting Language</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#operations">Operations</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#provided-commands-and-queries">Provided Commands and Queries</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#supported-language-constructs">Supported Language Constructs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error-messages">Error Messages</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#include-markers">Include Markers</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#relation-to-json-schema-and-xml-schema-definition">Relation to JSON Schema and XML Schema Definition</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#implementation-considerations">Implementation Considerations</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#error-logging">Error logging</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bugs-with-floats-and-integers">Bugs with Floats and Integers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#functional-languages">Functional languages</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#debugging">Debugging</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../naming-conventions/">Naming Conventions</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../roadmap/">Roadmap</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Design Docs for aasx-core</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>De/serialization Scripts</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="deserialization-scripts">De/serialization Scripts</h1>
+<p>For many similar languages following the procedural paradigm, it is tedious to write the deserialization over and over again.
+For example, once we implemented the deserialization of JSON in C#, it will be most probably the same thing in Java, and very similar in Golang.</p>
+<p>(<em>2021-03-26: Functional languages are an exception here, but that is a problem we abstract away at the moment.</em>)</p>
+<p>Instead, we propose to specify the de-serialization and serialization in a meta-language as a <strong>de/serialization script</strong>.
+A de/serialization script is then <strong>transpiled</strong> by the <a href="../general-design-decisions/#code-generators">code generators</a> into the respective implementation of the library.</p>
+<h2 id="scripting-language">Scripting Language</h2>
+<p>We use a subset of Python language to script the de/serialization.</p>
+<p>As the de/serialization scripts are not used by the wide audience, but only by the developers of the library, we intentionally decide on-the-go which Python features to support.
+Hence we only transpile a very limited subset of builtin functions and types.
+For example, we allow no nested functions, classes or context managers.</p>
+<h3 id="operations">Operations</h3>
+<p>Each <strong>de-serialization and serialization operation</strong> is given as a <strong>function</strong>.
+The function operates on a <code>jsonable</code>, the corresponding object to which the parsed data should be added and a path to the JSON-able.</p>
+<p>For example <code>parse_submodel_element</code>:</p>
+<pre><code class="language-python">def parse_submodel_element(
+    jsonable: object,
+    submodel: Submodel,
+    path: pathlib.Path) -&gt; None:
+    ...
+</code></pre>
+<h3 id="provided-commands-and-queries">Provided Commands and Queries</h3>
+<p>It is assumed that the de/serialization script can <strong>access the operations and the data structures of our library</strong> (such as <code>Submodel</code> in the aforementioned example).</p>
+<p>Additionally, special commands and queries such as <code>is_int32</code>, <code>is_int64</code>, …, <code>as_int32</code>, <code>as_int64</code>, <code>as_float32</code>, <code>as_float64</code>, <code>as_list</code> and <code>as_map</code> are provided to implement the logic.
+Functions such as <code>x = local_int32(0)</code> are used to instantiate local variables.
+These special commands and queries are implemented in a separate module, say, <code>aasx_core_gen.de_serialization</code>.</p>
+<h3 id="supported-language-constructs">Supported Language Constructs</h3>
+<p>For-loops can loop either over lists, over maps or over <code>for _ in range(..., ...)</code> where both start and end are given as integers.</p>
+<h3 id="error-messages">Error Messages</h3>
+<p>The errors should be reported using pre-defined functions <code>error(message: str, path: pathlib.Path)</code>.</p>
+<p>The messages should use <a href="https://docs.python.org/3/library/stdtypes.html#old-string-formatting">old string formatting</a> to allow for easier transpilation to languages such as C++ and Golang.</p>
+<h3 id="include-markers">Include Markers</h3>
+<p>Since we only provide a transpilation based on a subset of Python language, many operations will have to include manually defined code snippets.
+The developer should mark such spots with <a href="../general-design-decisions/#include-markers">include markers</a> using <code>NotImplementedError</code>.
+For example:</p>
+<pre><code>raise NotImplementedError('some-marker')
+</code></pre>
+<p>will make the <a href="../general-design-decisions/#code-generators">code generators</a> introduce an include marker <code>some-marker</code> in the generated code.
+The <a href="../general-design-decisions/#filler-script">filler script</a> will eventually replace the <a href="../general-design-decisions/#include-markers">include markers</a> with the corresponding code snippets written in the implementation language.</p>
+<h2 id="relation-to-json-schema-and-xml-schema-definition">Relation to <a href="https://json-schema.org/">JSON Schema</a> and <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a></h2>
+<p>We should write a separate code generator to bootstrap this scripting code based on a schema (<em>e.g.</em>, a <a href="https://json-schema.org/">JSON Schema</a>), but the schema should not be referenced in the meta-model nor available directly in code.
+There are two reasons for this decision:</p>
+<ul>
+<li>
+<p>Validation and parsing of the input needs <strong>complex logic</strong>.
+   We need to support dialects or instantiate different objects based on a complex logic.
+  This is not possible to define in a schema.</p>
+</li>
+<li>
+<p>The generated implementation does not depend on a schema.
+  Few languages support <a href="https://json-schema.org/">JSON Schema</a> and <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a> out-of-box.
+  The schema libraries, if available, tend to be slow and buggy (in general).</p>
+</li>
+</ul>
+<p>When the "official" schema changes, we need to manually update our code.
+For example, we could use the bootstrapping code generator to re-generate the code based on the new schema and inspect the changes with the <a href="https://en.wikipedia.org/wiki/Diff">diff</a> tool.
+This is clearly tedious, but we found no easy way around it.</p>
+<p>TODO (mristin, 2021-03-26): Draw a diagram to show how the workflow looks like</p>
+<h2 id="implementation-considerations">Implementation Considerations</h2>
+<h3 id="error-logging">Error logging</h3>
+<p>Error logging is more involved than it seems at first.
+We probably need to cap the maximum number of errors — once the error log is full, the parsing should be immediately stopped.
+This can be implemented by passing an <code>ErrorLog</code> to <code>parse_*</code> functions.
+As error logs are capped, the generated code should automatically check for available capacity at certain points (e.g., before descending into parsing the child elements), and abort the parsing if the capacity has been reached.
+This might also have implications on efficiency — but so do exceptions and stack unwinding!</p>
+<p>We might consider making two variants of <code>parse_*</code> functions — one with ErrorLog and one without (which raises the exceptions).
+The latter, which raises the exceptions, uses the first variant and passes an <code>ErrorRaiser</code> (or <code>ErrorThrower</code>, depending on the language) as <code>ErrorLog</code>.</p>
+<h3 id="bugs-with-floats-and-integers">Bugs with Floats and Integers</h3>
+<p>JSON specifies that all numbers (both integers and floats) are given as 64-bit floating point numbers (see <a href="https://github.com/grpc-ecosystem/grpc-gateway/issues/438#issuecomment-330742999">this comment on a GitHub issue</a>).
+Most JSON libraries will thus handle all numbers as 64-bit floats.
+This can lead to hard-to-spot bugs when the files are deserialized.</p>
+<p>Here is a Python snippet to illustrate the unexpected behavior:</p>
+<pre><code class="language-python">import json
+
+# Mind the last digit before the comma!
+&gt;&gt;&gt; json.loads('9007199254740993.0')
+9007199254740992.0
+</code></pre>
+<p>Similarly, in Golang:</p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;encoding/json&quot;
+    &quot;fmt&quot;
+)
+
+func main() {
+    var x interface{}
+    json.Unmarshal([]byte(&quot;9007199254740993&quot;), &amp;x)
+
+    xFloat64 := x.(float64)
+
+    fmt.Printf(&quot;x is %f\n&quot;, xFloat64)
+}
+</code></pre>
+<p>will give you: <code>x is 9007199254740992.000000</code> (again, mind the last digit).</p>
+<p>While we can not fix the de-serialization, as we usually rely on the built-in library, we could at least raise an exception during the serialization.
+For example, if we are serializing an 64-bit integer to JSON, we need to ensure that it is less-equal 2^52 (see again <a href="https://github.com/grpc-ecosystem/grpc-gateway/issues/438#issuecomment-330742999">this comment on a GitHub issue</a>).</p>
+<p>While the issue seems rare and irrelevant, that is not the case in the practice.
+All data structures that involve unique identifiers given as 64-bit integer numbers will exhibit the bug if they do not increment the identifiers consecutively, but generate random 64-bit identifiers.</p>
+<h3 id="functional-languages">Functional languages</h3>
+<p>We probably don't need a different scripting language for purely functional languages, but we need to think hard about it.
+At this stage, let us cover the procedural languages, and then think about how we can generate code for functional languages, and observe only then what walls we hit.</p>
+<h3 id="debugging">Debugging</h3>
+<p>There should be a flag in the <a href="../general-design-decisions/#code-generators">code generators</a> to allow for inclusion of the original scripts in the generated code as comments.
+Thus the generated code is easier to trace and double-check.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../testing/" class="btn btn-neutral float-right" title="Testing">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../contracts/" class="btn btn-neutral" title="Code Contracts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../contracts/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../testing/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

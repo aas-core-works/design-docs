@@ -56,7 +56,7 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../operations/">Operations</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../data-structures-and-operations/">Data Structures and Operations</a>
                     </li>
                 </ul>
                 <ul>
@@ -64,12 +64,22 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../json-deserialization/">JSON de/serialization</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../deserialization-scripts/">De/serialization Scripts</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../naming-conventions/">Naming Conventions</a>
                     </li>
                 </ul>
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Roadmap</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#priority-of-supported-languages">Priority of Supported Languages</a>
+    </li>
     </ul>
                     </li>
                 </ul>
@@ -106,7 +116,28 @@
             <div class="section">
               
                 <h1 id="roadmap">Roadmap</h1>
-<p>TODO: Marko</p>
+<p>The short-term goals (say April/May 2020) are:</p>
+<ul>
+<li>Focus at first only on interfaces.</li>
+<li>Only generate stubs together with contracts.</li>
+<li>Support <code>Identifiable</code> and a minimal support for nesting.<ul>
+<li><code>Submodel</code>, <code>SubmodelElementCollection</code>, <code>SubmodelElement</code> and <code>Property</code> </li>
+</ul>
+</li>
+<li>Support file objects and blobs</li>
+</ul>
+<h2 id="priority-of-supported-languages">Priority of Supported Languages</h2>
+<ul>
+<li>C#, so that the library can be already used by, say, <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a>.</li>
+<li>Python, so that we test how it works with a slightly different paradigm.</li>
+<li>Java, so that enterprise people can use it.</li>
+<li>C++, so that embedded people can use it.</li>
+<li>C, so that even "niche" embedded people can use it.</li>
+<li>Golang, so that "server" people can use it.</li>
+<li>IEC611311, so that machine developers can use it.</li>
+<li>Erlang, so that "network" people can use it.</li>
+<li>Rust, for the people who use it as an alternative to C/C++.</li>
+</ul>
               
             </div>
           </div>
@@ -115,7 +146,7 @@
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="../json-deserialization/" class="btn btn-neutral" title="JSON de/serialization"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../naming-conventions/" class="btn btn-neutral" title="Naming Conventions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -141,7 +172,7 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../json-deserialization/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../naming-conventions/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
     </span>

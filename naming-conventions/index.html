@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>JSON de/serialization - Design Docs for aasx-core</title>
+  <title>Naming Conventions - Design Docs for aasx-core</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "JSON de/serialization";
-    var mkdocs_page_input_path = "json-deserialization.md";
+    var mkdocs_page_name = "Naming Conventions";
+    var mkdocs_page_input_path = "naming-conventions.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -56,15 +56,23 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../operations/">Operations</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../data-structures-and-operations/">Data Structures and Operations</a>
                     </li>
                 </ul>
                 <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Code Contracts</a>
                     </li>
                 </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../deserialization-scripts/">De/serialization Scripts</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                    </li>
+                </ul>
                 <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">JSON de/serialization</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Naming Conventions</a>
     <ul class="current">
     </ul>
                     </li>
@@ -94,7 +102,7 @@
     
       
     
-    <li>JSON de/serialization</li>
+    <li>Naming Conventions</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -105,8 +113,12 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="json-deserialization">JSON De/serialization</h1>
-<p>TODO: Marko</p>
+                <h1 id="naming-conventions">Naming Conventions</h1>
+<p>All identifiers should use snake-case.
+The abbreviations should be in upper case, all other letters in lower case.</p>
+<p>We need this particular casing so that we can adapt the casing and variables to individual languages.
+For example, Python uses <code>snake_case</code> for properties, but <code>CamelCase</code> for classes.
+Golang style guide expect abbreviations to be upper case (<code>ParseXML</code>), while C# style guide wants camel case (<code>ParseXml</code>).</p>
               
             </div>
           </div>
@@ -117,7 +129,7 @@
         <a href="../roadmap/" class="btn btn-neutral float-right" title="Roadmap">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../contracts/" class="btn btn-neutral" title="Code Contracts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../testing/" class="btn btn-neutral" title="Testing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -143,7 +155,7 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../contracts/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../testing/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../roadmap/" style="color: #fcfcfc">Next &raquo;</a></span>

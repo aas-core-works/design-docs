@@ -56,17 +56,35 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../operations/">Operations</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../data-structures-and-operations/">Data Structures and Operations</a>
                     </li>
                 </ul>
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Code Contracts</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#definition-of-contracts">Definition of Contracts</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#error-messages">Error Messages</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#severity">Severity</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#contracts-and-serialization">Contracts and Serialization</a>
+    </li>
     </ul>
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../json-deserialization/">JSON de/serialization</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../deserialization-scripts/">De/serialization Scripts</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../naming-conventions/">Naming Conventions</a>
                     </li>
                 </ul>
                 <ul>
@@ -106,7 +124,47 @@
             <div class="section">
               
                 <h1 id="code-contracts">Code Contracts</h1>
-<p>TODO: Marko</p>
+<p>The specification of <a href="../data-structures-and-operations/#operations">operations</a> in our <a href="../general-design-decisions/#meta-model">meta-model</a> should include the <a href="https://en.wikipedia.org/wiki/Design_by_contract">code contracts</a> such as pre-conditions and post-conditions.</p>
+<p>The contracts can be trivial (such as specifying a range of a property), as well as very complex expressions (the length of this list needs to be divisble by three and the first element needs to be larger than the sum of all the other elements).</p>
+<p>The <a href="../general-design-decisions/#code-generators">code generators</a> transpile contracts so that they are <strong>included in the implementation</strong>.
+This has the following benefits:
+* The <em>implementation</em> of the library allows thus for <strong>deeper testing</strong> as contracts are checked during debuging, testing and in production.</p>
+<ul>
+<li>
+<p>Additionally, the <em>implementation</em> can be analyzed with <strong>static analyzers</strong> and <strong>automatic testers</strong> (such as <a href="https://github.com/pschanely/CrossHair">crosshair</a> and <a href="https://github.com/mristin/icontract-hypothesis">icontract-hypothesis</a>), which can only work with code with tight-enough contracts.</p>
+</li>
+<li>
+<p>The contracts are included in the <strong>documentation of the implementation</strong>.
+  Hence the users can rely on formal unambiguous documentation.
+  Moreover, the documentation in human language tends to "rot", while contracts are continuously and automatically verified in testing or in production.</p>
+</li>
+</ul>
+<h2 id="definition-of-contracts">Definition of Contracts</h2>
+<p>The contracts are written in <a href="https://www.w3.org/TR/shacl/">SHACL</a> and transpiled by <a href="../general-design-decisions/#code-generators">code generators</a> into the implementation stubs..</p>
+<p>As we could <strong>not support invariants</strong> in most languages, we decide to define contracts as <strong>pre-conditions</strong> and <strong>post-conditions</strong> of <strong><a href="../data-structures-and-operations/#operations">operations</a></strong>.</p>
+<p>Each contract should be given <strong>a unique identifier</strong>.</p>
+<h3 id="error-messages">Error Messages</h3>
+<p>The contracts should also include <strong>an error message</strong>.
+The error message should support <a href="https://en.wikipedia.org/wiki/Printf_format_string">printf format strings</a> so that we can include the actual offending values in the message as well.
+This is important for contracts which are enforced <strong>in production</strong> catching <strong>rare and hard-to-reproduce bugs</strong>.</p>
+<h3 id="severity">Severity</h3>
+<p>Each contract is given a  <strong>severity</strong> which determines when it is enforced:
+* <code>ALWAYS</code>, always enforced, including in production,
+* <code>DEBUG</code>, enforced both in our and external tests, and
+* <code>DEBUG_OURS</code>, enforced only in our tests, but excluded in external tests,
+* <code>DEBUG_SLOW</code> and <code>DEBUG_OURS_SLOW</code>, enforced only in the respective tests for which we know that the amount data is small.</p>
+<p>This allows us to enforce contracts with exploding computational complexity.</p>
+<p>For example, most post-conditions have the severity <code>DEBUG</code>.</p>
+<h2 id="contracts-and-serialization">Contracts and Serialization</h2>
+<p>The contracts are a tool for improving the <a href="https://en.wikipedia.org/wiki/Correctness_(computer_science)">correctness</a> of the code.
+They are not meant to be used as validation of the input (<em>e.g.</em>, a JSON file to be imported).</p>
+<p>In our setting, this means that the validation of the input is part of the <a href="../deserialization-scripts/">deserialization scripts</a>.
+ They need to check that the input is correct and conforms to the meta-model, and report the errors eventually to the user.
+In contrast, the contracts give us a certain assurance that the de-serialized objects are <strong>internally consistent</strong> and conform to our meta-model.</p>
+<p>In other words, the <a href="../deserialization-scripts/">deserialization scripts</a> verify the <strong>external data</strong>, while contracts verify the <strong>internal data</strong>.
+For example, we can use contracts to ensure that our deserialization works.
+Instead of writing tons of unit tests, we rely on the contracts to be verified during testing.
+A test boils down to simply de-serializing the example JSONs.</p>
               
             </div>
           </div>
@@ -114,10 +172,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../json-deserialization/" class="btn btn-neutral float-right" title="JSON de/serialization">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../deserialization-scripts/" class="btn btn-neutral float-right" title="De/serialization Scripts">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../operations/" class="btn btn-neutral" title="Operations"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../data-structures-and-operations/" class="btn btn-neutral" title="Data Structures and Operations"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -143,10 +201,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../operations/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../data-structures-and-operations/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../json-deserialization/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../deserialization-scripts/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
