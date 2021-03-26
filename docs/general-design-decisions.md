@@ -21,21 +21,21 @@ For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.
 
 ## Out-of-Scope
 
-* The **component manager**, the "active" part of the shell, is out-of-scope.
-
-  This is the responsability of other components such as [aasx-server].
-
-* The **thread-safe operations** and **ACID transactions** are out-of-scope.
-
+* The **component manager**, the "active" part of the shell, is out-of-scope.<br>
+  <br>
+  This is the responsability of other components such as [aasx-server].<br>
+  <br>
+* The **thread-safe operations** and **ACID transactions** are out-of-scope.<br>
+  <br>
   The locking as well as write-ahead logs are left to the user.
-  A different library, aasx-db (yet to be created), will provide such functionality.
-
-* We expect the data model of an [asset administration shell] to **fit in memory**.
-
-  Otherwise, components such as [aasx-server] and aasx-db (yet to be created) should be used.
-
-* Since **query language** has not been standardized yet, we will not implement it at this point (March 2021).
-
+  A different library, aasx-db (yet to be created), will provide such functionality.<br>
+  <br>
+* We expect the data model of an [asset administration shell] to **fit in memory**.<br>
+  <br>
+  Otherwise, components such as [aasx-server] and aasx-db (yet to be created) should be used.<br>
+  <br>
+* Since **query language** has not been standardized yet, we will not implement it at this point (March 2021).<br>
+  <br>
   The library should provide basic quering through dedicated operations based on the existing implementations, such as the data model of the [AASX Package Explorer].
 
 [aasx-server]: https://github.com/admin-shell-io/aasx-server
@@ -43,59 +43,68 @@ For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.
 
 ## Requirements
 
-* The library should be provided in **many programming languages**.
-
-* We aim for **unified interface** shared between the languages.
-Thus the users which use multiple languages can use the library effortlessly between them, as the interface remains familiar.
-
-* The **main user base** are the developers working on **stable production systems**.
-  However, the library should be **flexible enough** to allow **experimenters** to use it in their experimental code bases.
-
-* Certain **patterns** should be supported out-of-the-box.
-  For example, code for visitors and transformers should be included.
-
-* The library should **minimize the dependencies** to avoid the dependency hell and be runnable on as many systems as possible.
-
-* The implementations should be in **native code** (instead of wrapping, say, C++ code).
- This allows language-specific power features such as reflection.
-
-* The library should provide read/write operations on **AASX files**.
-  This means that blobs and packaged files should be readable/writable, but no additional features on the blobs should be made available.
-
-* The library should provide **import/export for JSON and XML**.
+* The library should be provided in **many programming languages**.<br>
+  <br>
+* We aim for **unified interface** shared between the languages.<br>
+  <br>
+  Thus the users which use multiple languages can use the library effortlessly between them, as the interface remains familiar.<br>
+  <br>
+* The **main user base** are the developers working on **stable production systems**.<br>
+  <br>
+  However, the library should be **flexible enough** to allow **experimenters** to use it in their experimental code bases.<br>
+  <br>
+* Certain **patterns** should be supported out-of-the-box.<br>
+  <br>
+  For example, code for visitors and transformers should be included.<br>
+  <br>
+* The library should **minimize the dependencies** to avoid the dependency hell and be runnable on as many systems as possible.<br>
+  <br>
+* The implementations should be in **native code** (instead of wrapping, say, C++ code).<br>
+  <br>
+  This allows language-specific power features such as reflection.<br>
+  <br>
+* The library should provide read/write operations on **AASX files**.<br>
+  <br>
+  This means that blobs and packaged files should be readable/writable, but no additional features on the blobs should be made available.<br>
+  <br>
+* The library should provide **import/export for JSON and XML**.<br>
+  <br>
   Other formats such as AutomationML and RDF are not supported out-of-the-box.
   However, adding imports and exports for additional formats should be straightforward, so that users can develop their own import/export libraries on the top. 
     * We should explicitly track how much friction there is if the user wants to use RDF, AML or any other serialization format.
     * For example, can the user just load an AASX and use RDF?
-    * Is there a hook to set up so that the user can choose which serialization methods should be supported?
-
-* The generated code should allow for **static analysis** as much as possible.
-  For example, [Nullable types] should be used wherever appropriate.
-
+    * Is there a hook to set up so that the user can choose which serialization methods should be supported?<br>
+  <br>
+* The generated code should allow for **static analysis** as much as possible.<br>
+  <br>
+  For example, [Nullable types] should be used wherever appropriate.<br>
+  <br>
 [Nullable types]: https://en.wikipedia.org/wiki/Nullable_type
 
-* We should support **wide range of computer architectures**.
+* We should support **wide range of computer architectures**.<br>
+  <br>
   For example, we need to support [Mono] in C# so that the library can run on ARM32 machines.
-  This is important as embedded systems often run on such machines.
-
+  This is important as embedded systems often run on such machines.<br>
+  <br>
 [Mono]: https://www.mono-project.com/
 
-* We need to support the **Environment (multiple shells)**, but not the shell repository.
-
-  You should be able to implement the repository using our library, but our library does not care about the repository.
-
-* We **postpone** the discussion about **the middlewares**.
-
+* We need to support the **Environment (multiple shells)**, but not the shell repository.<br>
+  <br>
+  You should be able to implement the repository using our library, but our library does not care about the repository.<br>
+  <br>
+* We **postpone** the discussion about **the middlewares**.<br>
+  <br>
   For example, it would be practical if we allowed for a middleware to resolve ecl@ss automatically.
-  However, this is not trivial and we leave this out at the moment (2021-03-26).
-
-* The user **should not use constructors** to create objects.
-
+  However, this is not trivial and we leave this out at the moment (2021-03-26).<br>
+  <br>
+* The user **should not use constructors** to create objects.<br>
+  <br>
   We want to keep migrations between aasx-core and aasx-db (its thread-safe pendant based on transactions) as effortless as possible.
   Since aasx-db is an *object-oriented database*, it needs to keep track of the objects and their state.
-  Therefore, constructors need to be handled through factory methods to prepare for a future migration to aasx-db.
-
-* **Computational efficiency** is important.
+  Therefore, constructors need to be handled through factory methods to prepare for a future migration to aasx-db.<br>
+  <br>
+* **Computational efficiency** is important.<br>
+  <br>
   The library will be used in large batches as well as servers which need to have large throughput.
 
 ## Development Workflow
@@ -118,6 +127,7 @@ The meta-model is written in [RDF SHACL].
 [RDF SHACL]: https://www.w3.org/TR/shacl/
 
 The meta-model specifies:
+
 * [Data Structures and Operations],
 * [Contracts] of the operations, and
 * [De/serialization scripts].
@@ -142,6 +152,7 @@ For example, `Identifiable` is one such trait which is used throughout the meta-
 
 We develop a code generator for each programming language separately.
 A code generator takes the [meta-model] as input and generates the stub of the library:
+
 * A code generator **generates** the interfaces and data structures based on the meta-model.
 * A code generator **transpiles** the [contracts] as well as [JSON de/serialization scripts] to the corresponding implementation language.
 
@@ -170,6 +181,7 @@ aasx-core{AAS version}-{language version}-{optional runtime version}
 ```
 
 For example:
+
 * `aasx-core2-java15` is the aasx-core library supporting the specification of the [asset administration shell] version 2 and Java 15.
 * Analogously, `aasx-core3-csharp8-dotnet5` is the aasx-core library supporting the specification of the [asset administration shell] version 3, C# version 8 and the runtime .NET 5.
 

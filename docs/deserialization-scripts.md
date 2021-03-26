@@ -27,9 +27,9 @@ For example `parse_submodel_element`:
 
 ```python
 def parse_submodel_element(
-    jsonable: object,
-    submodel: Submodel,
-    path: pathlib.Path) -> None:
+        jsonable: object,
+        submodel: Submodel,
+        path: pathlib.Path) -> None:
     ...
 ```
 

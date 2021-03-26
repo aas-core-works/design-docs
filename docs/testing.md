@@ -17,6 +17,7 @@ All invalid test cases should report one or more errors in the test.
 
 We collect different test cases as JSON and XML files.
 The test cases include multiple examples of:
+
 * File represents a valid shell,
 * File is invalid according to the schema,
 * File is valid according to the schema, but represents an invalid shell.
@@ -61,10 +62,10 @@ Depending on the maturity of the change, we use different test sets:
 * **Small**, on every **commit**. 
   A selected suit of manual test cases + 100 auto-generated ones.
 
-* **Medium**, on every alpha release. 
+* **Medium**, on every **alpha release**. 
   All manual test cases + 1000 auto-generated ones.
 
-* **Large**, on every release. 
+* **Large**, on every **release**. 
   All manual test cases + 1,000,000 auto-generated ones.
 
 The auto-generated tests are generated only once and "frozen".

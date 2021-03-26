@@ -42,12 +42,13 @@ This is important for contracts which are enforced **in production** catching **
 ### Severity
 
 Each contract is given a  **severity** which determines when it is enforced:
+
 * `ALWAYS`, always enforced, including in production,
 * `DEBUG`, enforced both in our and external tests, and
 * `DEBUG_OURS`, enforced only in our tests, but excluded in external tests,
-* `DEBUG_SLOW` and `DEBUG_OURS_SLOW`, enforced only in the respective tests for which we know that the amount data is small.
-
-   This allows us to enforce contracts with exploding computational complexity.
+* `DEBUG_SLOW` and `DEBUG_OURS_SLOW`, enforced only in the respective tests for which we know that the amount data is small.<br>
+  <br>
+  This allows us to enforce contracts with exploding computational complexity.
 
 For example, most post-conditions have the severity `DEBUG`.
 
