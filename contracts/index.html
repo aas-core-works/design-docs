@@ -148,12 +148,15 @@ This has the following benefits:
 The error message should support <a href="https://en.wikipedia.org/wiki/Printf_format_string">printf format strings</a> so that we can include the actual offending values in the message as well.
 This is important for contracts which are enforced <strong>in production</strong> catching <strong>rare and hard-to-reproduce bugs</strong>.</p>
 <h3 id="severity">Severity</h3>
-<p>Each contract is given a  <strong>severity</strong> which determines when it is enforced:
-* <code>ALWAYS</code>, always enforced, including in production,
-* <code>DEBUG</code>, enforced both in our and external tests, and
-* <code>DEBUG_OURS</code>, enforced only in our tests, but excluded in external tests,
-* <code>DEBUG_SLOW</code> and <code>DEBUG_OURS_SLOW</code>, enforced only in the respective tests for which we know that the amount data is small.</p>
-<p>This allows us to enforce contracts with exploding computational complexity.</p>
+<p>Each contract is given a  <strong>severity</strong> which determines when it is enforced:</p>
+<ul>
+<li><code>ALWAYS</code>, always enforced, including in production,</li>
+<li><code>DEBUG</code>, enforced both in our and external tests, and</li>
+<li><code>DEBUG_OURS</code>, enforced only in our tests, but excluded in external tests,</li>
+<li><code>DEBUG_SLOW</code> and <code>DEBUG_OURS_SLOW</code>, enforced only in the respective tests for which we know that the amount data is small.<br>
+  <br>
+  This allows us to enforce contracts with exploding computational complexity.</li>
+</ul>
 <p>For example, most post-conditions have the severity <code>DEBUG</code>.</p>
 <h2 id="contracts-and-serialization">Contracts and Serialization</h2>
 <p>The contracts are a tool for improving the <a href="https://en.wikipedia.org/wiki/Correctness_(computer_science)">correctness</a> of the code.

@@ -145,87 +145,91 @@
 For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.</p>
 <h2 id="out-of-scope">Out-of-Scope</h2>
 <ul>
-<li>The <strong>component manager</strong>, the "active" part of the shell, is out-of-scope.</li>
+<li>The <strong>component manager</strong>, the "active" part of the shell, is out-of-scope.<br>
+  <br>
+  This is the responsability of other components such as <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a>.<br>
+  <br></li>
+<li>The <strong>thread-safe operations</strong> and <strong>ACID transactions</strong> are out-of-scope.<br>
+  <br>
+  The locking as well as write-ahead logs are left to the user.
+  A different library, aasx-db (yet to be created), will provide such functionality.<br>
+  <br></li>
+<li>We expect the data model of an <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> to <strong>fit in memory</strong>.<br>
+  <br>
+  Otherwise, components such as <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a> and aasx-db (yet to be created) should be used.<br>
+  <br></li>
+<li>Since <strong>query language</strong> has not been standardized yet, we will not implement it at this point (March 2021).<br>
+  <br>
+  The library should provide basic quering through dedicated operations based on the existing implementations, such as the data model of the <a href="https://github.com/admin-shell-io/aasx-package-explorer">AASX Package Explorer</a>.</li>
 </ul>
-<p>This is the responsability of other components such as <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a>.</p>
-<ul>
-<li>The <strong>thread-safe operations</strong> and <strong>ACID transactions</strong> are out-of-scope.</li>
-</ul>
-<p>The locking as well as write-ahead logs are left to the user.
-  A different library, aasx-db (yet to be created), will provide such functionality.</p>
-<ul>
-<li>We expect the data model of an <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> to <strong>fit in memory</strong>.</li>
-</ul>
-<p>Otherwise, components such as <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a> and aasx-db (yet to be created) should be used.</p>
-<ul>
-<li>Since <strong>query language</strong> has not been standardized yet, we will not implement it at this point (March 2021).</li>
-</ul>
-<p>The library should provide basic quering through dedicated operations based on the existing implementations, such as the data model of the <a href="https://github.com/admin-shell-io/aasx-package-explorer">AASX Package Explorer</a>.</p>
 <h2 id="requirements">Requirements</h2>
 <ul>
-<li>
-<p>The library should be provided in <strong>many programming languages</strong>.</p>
-</li>
-<li>
-<p>We aim for <strong>unified interface</strong> shared between the languages.
-Thus the users which use multiple languages can use the library effortlessly between them, as the interface remains familiar.</p>
-</li>
-<li>
-<p>The <strong>main user base</strong> are the developers working on <strong>stable production systems</strong>.
-  However, the library should be <strong>flexible enough</strong> to allow <strong>experimenters</strong> to use it in their experimental code bases.</p>
-</li>
-<li>
-<p>Certain <strong>patterns</strong> should be supported out-of-the-box.
-  For example, code for visitors and transformers should be included.</p>
-</li>
-<li>
-<p>The library should <strong>minimize the dependencies</strong> to avoid the dependency hell and be runnable on as many systems as possible.</p>
-</li>
-<li>
-<p>The implementations should be in <strong>native code</strong> (instead of wrapping, say, C++ code).
- This allows language-specific power features such as reflection.</p>
-</li>
-<li>
-<p>The library should provide read/write operations on <strong>AASX files</strong>.
-  This means that blobs and packaged files should be readable/writable, but no additional features on the blobs should be made available.</p>
-</li>
-<li>
-<p>The library should provide <strong>import/export for JSON and XML</strong>.
+<li>The library should be provided in <strong>many programming languages</strong>.<br>
+  <br></li>
+<li>We aim for <strong>unified interface</strong> shared between the languages.<br>
+  <br>
+  Thus the users which use multiple languages can use the library effortlessly between them, as the interface remains familiar.<br>
+  <br></li>
+<li>The <strong>main user base</strong> are the developers working on <strong>stable production systems</strong>.<br>
+  <br>
+  However, the library should be <strong>flexible enough</strong> to allow <strong>experimenters</strong> to use it in their experimental code bases.<br>
+  <br></li>
+<li>Certain <strong>patterns</strong> should be supported out-of-the-box.<br>
+  <br>
+  For example, code for visitors and transformers should be included.<br>
+  <br></li>
+<li>The library should <strong>minimize the dependencies</strong> to avoid the dependency hell and be runnable on as many systems as possible.<br>
+  <br></li>
+<li>The implementations should be in <strong>native code</strong> (instead of wrapping, say, C++ code).<br>
+  <br>
+  This allows language-specific power features such as reflection.<br>
+  <br></li>
+<li>The library should provide read/write operations on <strong>AASX files</strong>.<br>
+  <br>
+  This means that blobs and packaged files should be readable/writable, but no additional features on the blobs should be made available.<br>
+  <br></li>
+<li>The library should provide <strong>import/export for JSON and XML</strong>.<br>
+  <br>
   Other formats such as AutomationML and RDF are not supported out-of-the-box.
-  However, adding imports and exports for additional formats should be straightforward, so that users can develop their own import/export libraries on the top. </p>
-<ul>
+  However, adding imports and exports for additional formats should be straightforward, so that users can develop their own import/export libraries on the top. <ul>
 <li>We should explicitly track how much friction there is if the user wants to use RDF, AML or any other serialization format.</li>
 <li>For example, can the user just load an AASX and use RDF?</li>
-<li>Is there a hook to set up so that the user can choose which serialization methods should be supported?</li>
+<li>Is there a hook to set up so that the user can choose which serialization methods should be supported?<br>
+  <br></li>
 </ul>
 </li>
 <li>
-<p>The generated code should allow for <strong>static analysis</strong> as much as possible.
-  For example, <a href="https://en.wikipedia.org/wiki/Nullable_type">Nullable types</a> should be used wherever appropriate.</p>
+<p>The generated code should allow for <strong>static analysis</strong> as much as possible.<br>
+  <br>
+  For example, <a href="https://en.wikipedia.org/wiki/Nullable_type">Nullable types</a> should be used wherever appropriate.<br>
+  <br></p>
 </li>
 <li>
-<p>We should support <strong>wide range of computer architectures</strong>.
+<p>We should support <strong>wide range of computer architectures</strong>.<br>
+  <br>
   For example, we need to support <a href="https://www.mono-project.com/">Mono</a> in C# so that the library can run on ARM32 machines.
-  This is important as embedded systems often run on such machines.</p>
+  This is important as embedded systems often run on such machines.<br>
+  <br></p>
 </li>
 <li>
-<p>We need to support the <strong>Environment (multiple shells)</strong>, but not the shell repository.</p>
+<p>We need to support the <strong>Environment (multiple shells)</strong>, but not the shell repository.<br>
+  <br>
+  You should be able to implement the repository using our library, but our library does not care about the repository.<br>
+  <br></p>
 </li>
-</ul>
-<p>You should be able to implement the repository using our library, but our library does not care about the repository.</p>
-<ul>
-<li>We <strong>postpone</strong> the discussion about <strong>the middlewares</strong>.</li>
-</ul>
-<p>For example, it would be practical if we allowed for a middleware to resolve ecl@ss automatically.
-  However, this is not trivial and we leave this out at the moment (2021-03-26).</p>
-<ul>
-<li>The user <strong>should not use constructors</strong> to create objects.</li>
-</ul>
-<p>We want to keep migrations between aasx-core and aasx-db (its thread-safe pendant based on transactions) as effortless as possible.
+<li>We <strong>postpone</strong> the discussion about <strong>the middlewares</strong>.<br>
+  <br>
+  For example, it would be practical if we allowed for a middleware to resolve ecl@ss automatically.
+  However, this is not trivial and we leave this out at the moment (2021-03-26).<br>
+  <br></li>
+<li>The user <strong>should not use constructors</strong> to create objects.<br>
+  <br>
+  We want to keep migrations between aasx-core and aasx-db (its thread-safe pendant based on transactions) as effortless as possible.
   Since aasx-db is an <em>object-oriented database</em>, it needs to keep track of the objects and their state.
-  Therefore, constructors need to be handled through factory methods to prepare for a future migration to aasx-db.</p>
-<ul>
-<li><strong>Computational efficiency</strong> is important.
+  Therefore, constructors need to be handled through factory methods to prepare for a future migration to aasx-db.<br>
+  <br></li>
+<li><strong>Computational efficiency</strong> is important.<br>
+  <br>
   The library will be used in large batches as well as servers which need to have large throughput.</li>
 </ul>
 <h2 id="development-workflow">Development Workflow</h2>
@@ -236,18 +240,22 @@ Additionally, when the specification of the <a href="https://www.plattform-i40.d
 <p><img alt="Workflow Overview" src="workflow-overview.svg" /></p>
 <h2 id="meta-model">Meta-model</h2>
 <p>The meta-model is written in <a href="https://www.w3.org/TR/shacl/">RDF SHACL</a>.</p>
-<p>The meta-model specifies:
-* <a href="../data-structures-and-operations/">Data Structures and Operations</a>,
-* <a href="../contracts/">Contracts</a> of the operations, and
-* <a href="../deserialization-scripts/">De/serialization scripts</a>.</p>
+<p>The meta-model specifies:</p>
+<ul>
+<li><a href="../data-structures-and-operations/">Data Structures and Operations</a>,</li>
+<li><a href="../contracts/">Contracts</a> of the operations, and</li>
+<li><a href="../deserialization-scripts/">De/serialization scripts</a>.</li>
+</ul>
 <p>Schemas such as <a href="https://json-schema.org/">JSON Schema</a> and <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a> are not powerful enough as we can not specify the operations and corresopnding contracts.</p>
 <p>The meta-model needs to allow for something akin to <a href="https://en.wikipedia.org/wiki/Trait_(computer_programming)">traits</a>,  <a href="https://en.wikipedia.org/wiki/Mixin">mixins</a> or <a href="https://en.wikipedia.org/wiki/Multiple_inheritance">multiple inheritance</a> so that common structures are re-used.
 For example, <code>Identifiable</code> is one such trait which is used throughout the meta-model.</p>
 <h2 id="code-generators">Code generators</h2>
 <p>We develop a code generator for each programming language separately.
-A code generator takes the <a href="#meta-model">meta-model</a> as input and generates the stub of the library:
-* A code generator <strong>generates</strong> the interfaces and data structures based on the meta-model.
-* A code generator <strong>transpiles</strong> the <a href="../contracts/">contracts</a> as well as [JSON de/serialization scripts] to the corresponding implementation language.</p>
+A code generator takes the <a href="#meta-model">meta-model</a> as input and generates the stub of the library:</p>
+<ul>
+<li>A code generator <strong>generates</strong> the interfaces and data structures based on the meta-model.</li>
+<li>A code generator <strong>transpiles</strong> the <a href="../contracts/">contracts</a> as well as [JSON de/serialization scripts] to the corresponding implementation language.</li>
+</ul>
 <p>The developer needs to fill in the stubs to finalize the library.</p>
 <h3 id="include-markers">Include Markers</h3>
 <p>The generated stubs contain <strong>include markers</strong> which specify parts of the code that need to be filled in.
@@ -261,9 +269,11 @@ A <strong>filler script</strong> is provided to replace the include markers with
 <p>We use the schema:</p>
 <pre><code>aasx-core{AAS version}-{language version}-{optional runtime version}
 </code></pre>
-<p>For example:
-* <code>aasx-core2-java15</code> is the aasx-core library supporting the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> version 2 and Java 15.
-* Analogously, <code>aasx-core3-csharp8-dotnet5</code> is the aasx-core library supporting the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> version 3, C# version 8 and the runtime .NET 5.</p>
+<p>For example:</p>
+<ul>
+<li><code>aasx-core2-java15</code> is the aasx-core library supporting the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> version 2 and Java 15.</li>
+<li>Analogously, <code>aasx-core3-csharp8-dotnet5</code> is the aasx-core library supporting the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> version 3, C# version 8 and the runtime .NET 5.</li>
+</ul>
 <p>We follow <a href="http://semver.org/spec/v1.0.0.html">Semantic Versioning</a> for the versioning of the library.
 The version X.Y.Z indicates:</p>
 <ul>

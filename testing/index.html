@@ -139,10 +139,12 @@ The serialization of the de-serialization of an input should give you the very s
 <p>All invalid test cases should report one or more errors in the test.</p>
 <h2 id="manual-test-cases">Manual Test Cases</h2>
 <p>We collect different test cases as JSON and XML files.
-The test cases include multiple examples of:
-* File represents a valid shell,
-* File is invalid according to the schema,
-* File is valid according to the schema, but represents an invalid shell.</p>
+The test cases include multiple examples of:</p>
+<ul>
+<li>File represents a valid shell,</li>
+<li>File is invalid according to the schema,</li>
+<li>File is valid according to the schema, but represents an invalid shell.</li>
+</ul>
 <p>We also need special test cases to account for <a href="../deserialization-scripts/#bugs-with-floats-and-integers">bugs related to how JSON handles numbers</a>.</p>
 <h2 id="generated-test-cases">Generated Test Cases</h2>
 <p>Manually constructing shells is tedious and we will almost certainly miss many edge cases.
@@ -167,11 +169,11 @@ We hope that manually constructed test cases make up for this deficiency in auto
   A selected suit of manual test cases + 100 auto-generated ones.</p>
 </li>
 <li>
-<p><strong>Medium</strong>, on every alpha release. 
+<p><strong>Medium</strong>, on every <strong>alpha release</strong>. 
   All manual test cases + 1000 auto-generated ones.</p>
 </li>
 <li>
-<p><strong>Large</strong>, on every release. 
+<p><strong>Large</strong>, on every <strong>release</strong>. 
   All manual test cases + 1,000,000 auto-generated ones.</p>
 </li>
 </ul>
