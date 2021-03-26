@@ -7,6 +7,8 @@ from typing import List
 
 TRAILING_WHITESPACE_RE = re.compile(r'\s+$')
 
+TODO_RE = re.compile(r'^TODO \([^)]+, [0-9]{4}-[0-9]{2}-[0-9]{2}\): [A-Z]')
+
 
 def check(path: pathlib.Path) -> List[str]:
     """Check that the document conforms to the style guide."""
@@ -24,21 +26,32 @@ def check(path: pathlib.Path) -> List[str]:
             f"but got: {json.dumps(lines[0])}")
 
     prev_line_was_heading = False
+    in_code_block = False
     for i, line in enumerate(lines):
+        if line.startswith('```'):
+            in_code_block = not in_code_block
+
         if TRAILING_WHITESPACE_RE.match(line):
             errors.append(
                 f"Unexpected trailing whitespace at line {i + 1}: {json.dumps(line)}")
 
-        if prev_line_was_heading and line.strip() != '':
-            errors.append(
-                f"Expected an empty line {i + 1} after a heading at line {i}, "
-                f"but got: {json.dumps(line)}"
-            )
+        if not in_code_block:
+            if line.startswith('TODO') and not TODO_RE.match(line):
+                errors.append(
+                    f"Expected a TODO at line {i+1} given as "
+                    f"'TODO (username, 2021-03-26): Do something', "
+                    f"but got: {json.dumps(line)}")
 
-        if line.startswith("#"):
-            prev_line_was_heading = True
-        else:
-            prev_line_was_heading = False
+            if prev_line_was_heading and line.strip() != '':
+                errors.append(
+                    f"Expected an empty line {i + 1} after a heading at line {i}, "
+                    f"but got: {json.dumps(line)}"
+                )
+
+            if line.startswith("#"):
+                prev_line_was_heading = True
+            else:
+                prev_line_was_heading = False
 
     if not text.endswith('\n'):
         errors.append(

@@ -2,8 +2,10 @@ site_name: Design Docs for aasx-core
 nav:
     - Home: index.md
     - General Design Decisions: general-design-decisions.md
-    - Operations: operations.md
+    - Data Structures and Operations: data-structures-and-operations.md
     - Code Contracts: contracts.md
-    - JSON de/serialization: json-deserialization.md
+    - De/serialization Scripts: deserialization-scripts.md
+    - Testing: testing.md
+    - Naming Conventions: naming-conventions.md
     - Roadmap: roadmap.md
 theme: readthedocs
