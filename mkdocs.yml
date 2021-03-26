@@ -1,0 +1,9 @@
+site_name: Design Docs for aasx-core
+nav:
+    - Home: index.md
+    - General Design Decisions: general-design-decisions.md
+    - Operations: operations.md
+    - Code Contracts: contracts.md
+    - JSON de/serialization: json-deserialization.md
+    - Roadmap: roadmap.md
+theme: readthedocs

@@ -1,0 +1,25 @@
+name: Check-on-pull-request
+
+on: [pull_request]
+
+jobs:
+  Execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install -r requirements.txt
+
+      - name: Build
+        run: python3 build.py
+
+      - name: Check style
+        run: python3 check_style.py
