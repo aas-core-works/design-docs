@@ -1,0 +1,22 @@
+digraph G {
+    base_meta_model [label="Base meta-model\n(RDF + SHACL)"];
+
+    our_meta_model [
+        shape=box,
+        label=<
+        <table border="0">
+            <tr><td align="left">Our meta-model:</td></tr>
+            <tr><td align="left">• Data structures</td></tr>
+            <tr><td align="left">• Operations</td></tr>
+            <tr><td align="left">• Contracts</td></tr>
+            <tr><td align="left">• De/serialization scripts (JSON, XML)</td></tr>
+        </table> >];
+
+    stubs [label=< Stubs + contracts<br/>(in C#, Java <i>etc.</i>) >];
+
+    implementation [label=< Implementation<br/>(in C#, Java <i>etc.</i>) >];
+
+    base_meta_model -> our_meta_model [label="  manually"];
+    our_meta_model -> stubs [label="  automatically"];
+    stubs -> implementation [label="  manually"];
+}
