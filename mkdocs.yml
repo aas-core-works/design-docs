@@ -9,3 +9,6 @@ nav:
     - Naming Conventions: naming-conventions.md
     - Roadmap: roadmap.md
 theme: readthedocs
+markdown_extensions:
+    - toc:
+        permalink: "#"
