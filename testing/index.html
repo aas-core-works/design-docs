@@ -70,21 +70,25 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Testing</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#test-for-identity">Test for Identity</a>
+    <li class="toctree-l2"><a class="reference internal" href="#scripted-unit-tests">Scripted Unit Tests</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#manual-test-cases">Manual Test Cases</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#generated-test-cases">Generated Test Cases</a>
+    <li class="toctree-l2"><a class="reference internal" href="#identity-tests">Identity Tests</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#valid">Valid</a>
+    <li class="toctree-l3"><a class="reference internal" href="#manual-test-cases">Manual Test Cases</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#invalid-wrt-schema">Invalid w.r.t. Schema</a>
+    <li class="toctree-l3"><a class="reference internal" href="#generated-test-cases">Generated Test Cases</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#valid">Valid</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#invalid-wrt-meta-model">Invalid w.r.t. Meta-model</a>
+    <li class="toctree-l4"><a class="reference internal" href="#invalid-wrt-schema">Invalid w.r.t. Schema</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#invalid-wrt-meta-model">Invalid w.r.t. Meta-model</a>
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#test-sets">Test Sets</a>
+    <li class="toctree-l3"><a class="reference internal" href="#test-sets">Test Sets</a>
+    </li>
+        </ul>
     </li>
     </ul>
                     </li>
@@ -130,14 +134,28 @@
             <div class="section">
               
                 <h1 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">#</a></h1>
-<h2 id="test-for-identity">Test for Identity<a class="headerlink" href="#test-for-identity" title="Permanent link">#</a></h2>
+<p>We perform two kinds of testing:</p>
+<ul>
+<li><strong>Unit tests</strong>, which test the individual operations, and</li>
+<li><strong>Identity tests</strong>, which test the de/serialization. </li>
+</ul>
+<p><img alt="Overview" src="overview.svg" /></p>
+<h2 id="scripted-unit-tests">Scripted Unit Tests<a class="headerlink" href="#scripted-unit-tests" title="Permanent link">#</a></h2>
+<p>Since we develop in a polyglot setting, the logic of most of the unit tests will be the same across the languages.
+Therefore we script those unit tests in a common language.
+ Similar to <a href="../deserialization-scripts/">de/serialization scripts</a>, we generate the implementations in the respective languages based on these unit test scripts.</p>
+<p>We will initially use a subset of Python.
+We do not know at this point (2021-03-27) which language features we need nor what constructs we need to support.
+It is also possible that we can script tests using even a simpler language (<em>e.g.</em>, a chain of JSON objects describing the actions).
+Hence it remains to be further discussed how this scripting of unit tests should be implemented.</p>
+<h2 id="identity-tests">Identity Tests<a class="headerlink" href="#identity-tests" title="Permanent link">#</a></h2>
 <p>To establish the correctness of the de-serialization, contracts and serialization, we test for identity.
 The serialization of the de-serialization of an input should give you the very same input.
  Formally:
  <code>serialize(deserialize(input)) == input</code></p>
 <p>All valid test cases should satisfy this property.</p>
 <p>All invalid test cases should report one or more errors in the test.</p>
-<h2 id="manual-test-cases">Manual Test Cases<a class="headerlink" href="#manual-test-cases" title="Permanent link">#</a></h2>
+<h3 id="manual-test-cases">Manual Test Cases<a class="headerlink" href="#manual-test-cases" title="Permanent link">#</a></h3>
 <p>We collect different test cases as JSON and XML files.
 The test cases include multiple examples of:</p>
 <ul>
@@ -146,22 +164,22 @@ The test cases include multiple examples of:</p>
 <li>File is valid according to the schema, but represents an invalid shell.</li>
 </ul>
 <p>We also need special test cases to account for <a href="../deserialization-scripts/#bugs-with-floats-and-integers">bugs related to how JSON handles numbers</a>.</p>
-<h2 id="generated-test-cases">Generated Test Cases<a class="headerlink" href="#generated-test-cases" title="Permanent link">#</a></h2>
+<h3 id="generated-test-cases">Generated Test Cases<a class="headerlink" href="#generated-test-cases" title="Permanent link">#</a></h3>
 <p>Manually constructing shells is tedious and we will almost certainly miss many edge cases.
 Therefore we turn to automatic generation of test cases to increase the test coverage.</p>
-<h3 id="valid">Valid<a class="headerlink" href="#valid" title="Permanent link">#</a></h3>
+<h4 id="valid">Valid<a class="headerlink" href="#valid" title="Permanent link">#</a></h4>
 <p>We script the generation of valid cases in Python by using <a href="https://hypothesis.readthedocs.io/en/latest/">Hypothesis</a> library and serialize the generated shells to JSON and XML (using our library).</p>
-<h3 id="invalid-wrt-schema">Invalid w.r.t. Schema<a class="headerlink" href="#invalid-wrt-schema" title="Permanent link">#</a></h3>
+<h4 id="invalid-wrt-schema">Invalid w.r.t. Schema<a class="headerlink" href="#invalid-wrt-schema" title="Permanent link">#</a></h4>
 <p>We randomly erase required parts or flip the types of the JSON schema.
  Using such a defect JSON schema we generate the invalid data automatically by sampling with <a href="https://pypi.org/project/hypothesis-jsonschema/">hypothesis-jsonschema</a>.
 This generates the cases which are invalid with respect to schema.</p>
-<h3 id="invalid-wrt-meta-model">Invalid w.r.t. Meta-model<a class="headerlink" href="#invalid-wrt-meta-model" title="Permanent link">#</a></h3>
+<h4 id="invalid-wrt-meta-model">Invalid w.r.t. Meta-model<a class="headerlink" href="#invalid-wrt-meta-model" title="Permanent link">#</a></h4>
 <p>Automatically generating cases which are valid according to the schema, but invalid w.r.t. meta-model is hard as we can never be sure of the correctness of our de-serialization and contracts.</p>
 <p>Therefore we generate JSON data using <a href="https://pypi.org/project/hypothesis-jsonschema/">hypothesis-jsonschema</a> and manually inspect the failing examples.
 This will help us debug our de-serialization and contracts a bit.</p>
 <p>Since inspecting the passing examples is too laborious, we consciously miss all false positives (invalid shell, but passed de-serialization and contracts).
 We hope that manually constructed test cases make up for this deficiency in automatically generated cases.</p>
-<h2 id="test-sets">Test Sets<a class="headerlink" href="#test-sets" title="Permanent link">#</a></h2>
+<h3 id="test-sets">Test Sets<a class="headerlink" href="#test-sets" title="Permanent link">#</a></h3>
 <p>Depending on the maturity of the change, we use different test sets:</p>
 <ul>
 <li>
