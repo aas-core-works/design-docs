@@ -129,12 +129,14 @@ The meta-model is written in [RDF SHACL].
 The meta-model specifies:
 
 * [Data Structures and Operations],
-* [Contracts] of the operations, and
-* [De/serialization scripts].
+* [Contracts] of the operations,
+* [De/serialization scripts], and
+* [Unit test scripts].
 
 [Data Structures and Operations]: data-structures-and-operations.md
 [Contracts]: contracts.md
 [De/serialization scripts]: deserialization-scripts.md
+[Unit test scripts]: testing.md#scripted-unit-tests
 
 Schemas such as [JSON Schema] and [XML Schema Definition] are not powerful enough as we can not specify the operations and corresopnding contracts.
 

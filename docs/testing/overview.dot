@@ -1,0 +1,22 @@
+digraph G {
+    testing [label="Testing"];
+
+    unit_tests [label="Unit tests"];
+    identity_tests [label=<
+        <table border="0">
+        <tr><td align="left">Identity tests:</td></tr>
+        <tr><td align="left">• Manual test cases</td></tr>
+        <tr><td align="left">• Generated test cases</td></tr>
+        </table> > ]
+
+    valid [label="Valid cases"]
+    invalid_wrt_schema [label="Invalid w.r.t. schema"]
+    invalid_wrt_meta_model [label="Valid w.r.t. schema,\ninvalid w.r.t. meta-model"]
+
+    testing -> unit_tests
+    testing -> identity_tests
+
+    identity_tests -> valid
+    identity_tests -> invalid_wrt_schema
+    identity_tests -> invalid_wrt_meta_model
+}
