@@ -55,9 +55,21 @@
                     <li class="toctree-l1"><a class="reference internal" href="../general-design-decisions/">General Design Decisions</a>
                     </li>
                 </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../simplified-python/">Simplified Python</a>
+                    </li>
+                </ul>
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Data Structures and Operations</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#bootstrapping">Bootstrapping</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#operation-scripting">Operation scripting</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#state">State</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#contracts">Contracts</a>
+    </li>
     </ul>
                     </li>
                 </ul>
@@ -113,8 +125,28 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="operations">Operations<a class="headerlink" href="#operations" title="Permanent link">#</a></h1>
-<p>TODO (Nico, 2021-03-26): Write</p>
+                <h1 id="data-structures-and-operations">Data Structures and Operations<a class="headerlink" href="#data-structures-and-operations" title="Permanent link">#</a></h1>
+<p>TODO (Marko &amp; Nico &amp; Robert, 2021-03-28): Discuss</p>
+<p>We specify the data structures and operations using <a href="../simplified-python/">our simplified Python</a>.
+Based on this specification, we generate the data structures and operation stubs in the respective implementations of the library (see <a href="../general-design-decisions/">general design decisions</a>).</p>
+<h2 id="bootstrapping">Bootstrapping<a class="headerlink" href="#bootstrapping" title="Permanent link">#</a></h2>
+<p>We provide a bootstrapping script that converts the "official" <a href="https://en.wikipedia.org/wiki/RDF_Schema">RDF schema</a> into <a href="../simplified-python/">our simplified Python</a>.</p>
+<p>Since schema changes rarely, we will use <a href="https://en.wikipedia.org/wiki/Diff">diff</a> to keep our data structures and operations in sync with the "official" <a href="https://en.wikipedia.org/wiki/RDF_Schema">RDF schema</a>. </p>
+<h2 id="operation-scripting">Operation scripting<a class="headerlink" href="#operation-scripting" title="Permanent link">#</a></h2>
+<p>Many operations, such as simple add/remove commands, are trivial to script and transpile into the implementation.
+For such operations, we script them in <a href="../simplified-python/">our simplified Python</a> directly in the meta-model.
+Thus their code is automatically generated, and needs not to be written manually in the implementations.</p>
+<p>The complex operations which cannot be scripted are marked with <a href="../simplified-python/#include-markers">include markers</a>.</p>
+<h2 id="state">State<a class="headerlink" href="#state" title="Permanent link">#</a></h2>
+<p>We define the state of the objects by using [dataclasses].
+Both private and public state is defined, if possible.
+This makes the debugging and reading the implementation code across the implementation languages easier, as the reader is already familiar with the names.</p>
+<p>Private properties are marked with an underscore prefix (<code>_some_private_property</code>).</p>
+<p>If we can not meaningfully define some properties (<em>e.g.</em>, since it uses a specialized data structure), we write <a href="../simplified-python/#include-markers">include markers</a> as placeholders.
+The developer needs to define them manually in a separate code snippet written in the corresponding implementation language.</p>
+<h2 id="contracts">Contracts<a class="headerlink" href="#contracts" title="Permanent link">#</a></h2>
+<p>Contracts are defined along the operations with <a href="https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Decorators">function decorators</a>.
+Please see the document <a href="../contracts/">Contracts</a> for more information.</p>
               
             </div>
           </div>
@@ -125,7 +157,7 @@
         <a href="../contracts/" class="btn btn-neutral float-right" title="Code Contracts">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../general-design-decisions/" class="btn btn-neutral" title="General Design Decisions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../simplified-python/" class="btn btn-neutral" title="Simplified Python"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -151,7 +183,7 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../general-design-decisions/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../simplified-python/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../contracts/" style="color: #fcfcfc">Next &raquo;</a></span>

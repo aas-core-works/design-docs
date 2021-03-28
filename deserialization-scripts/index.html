@@ -56,6 +56,10 @@
                     </li>
                 </ul>
                 <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../simplified-python/">Simplified Python</a>
+                    </li>
+                </ul>
+                <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../data-structures-and-operations/">Data Structures and Operations</a>
                     </li>
                 </ul>
@@ -66,19 +70,11 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">De/serialization Scripts</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#scripting-language">Scripting Language</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#operations">Operations</a>
+    <li class="toctree-l2"><a class="reference internal" href="#operations">Operations</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#provided-commands-and-queries">Provided Commands and Queries</a>
+    <li class="toctree-l2"><a class="reference internal" href="#provided-commands-and-queries">Provided Commands and Queries</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#supported-language-constructs">Supported Language Constructs</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#error-messages">Error Messages</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#include-markers">Include Markers</a>
-    </li>
-        </ul>
+    <li class="toctree-l2"><a class="reference internal" href="#error-messages">Error Messages</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#relation-to-json-schema-and-xml-schema-definition">Relation to JSON Schema and XML Schema Definition</a>
     </li>
@@ -145,13 +141,8 @@
 <p>For many similar languages following the procedural paradigm, it is tedious to write the deserialization over and over again.
 For example, once we implemented the deserialization of JSON in C#, it will be most probably the same thing in Java, and very similar in Golang.</p>
 <p>(<em>2021-03-26: Functional languages are an exception here, but that is a problem we abstract away at the moment.</em>)</p>
-<p>Instead, we propose to specify the de-serialization and serialization in a meta-language as a <strong>de/serialization script</strong>.
+<p>Instead, we propose to specify the de-serialization and serialization in <a href="../simplified-python/">our simplified Python</a> as a <strong>de/serialization script</strong>.
 A de/serialization script is then <strong>transpiled</strong> by the <a href="../general-design-decisions/#code-generators">code generators</a> into the respective implementation of the library.</p>
-<h2 id="scripting-language">Scripting Language<a class="headerlink" href="#scripting-language" title="Permanent link">#</a></h2>
-<p>We use a subset of Python language to script the de/serialization.</p>
-<p>As the de/serialization scripts are not used by the wide audience, but only by the developers of the library, we intentionally decide on-the-go which Python features to support.
-Hence we only transpile a very limited subset of builtin functions and types.
-For example, we allow no nested functions, classes or context managers.</p>
 <h3 id="operations">Operations<a class="headerlink" href="#operations" title="Permanent link">#</a></h3>
 <p>Each <strong>de-serialization and serialization operation</strong> is given as a <strong>function</strong>.
 The function operates on a <code>jsonable</code>, the corresponding object to which the parsed data should be added and a path to the JSON-able.</p>
@@ -167,19 +158,8 @@ The function operates on a <code>jsonable</code>, the corresponding object to wh
 <p>Additionally, special commands and queries such as <code>is_int32</code>, <code>is_int64</code>, …, <code>as_int32</code>, <code>as_int64</code>, <code>as_float32</code>, <code>as_float64</code>, <code>as_list</code> and <code>as_map</code> are provided to implement the logic.
 Functions such as <code>x = local_int32(0)</code> are used to instantiate local variables.
 These special commands and queries are implemented in a separate module, say, <code>aasx_core_gen.de_serialization</code>.</p>
-<h3 id="supported-language-constructs">Supported Language Constructs<a class="headerlink" href="#supported-language-constructs" title="Permanent link">#</a></h3>
-<p>For-loops can loop either over lists, over maps or over <code>for _ in range(..., ...)</code> where both start and end are given as integers.</p>
 <h3 id="error-messages">Error Messages<a class="headerlink" href="#error-messages" title="Permanent link">#</a></h3>
 <p>The errors should be reported using pre-defined functions <code>error(message: str, path: pathlib.Path)</code>.</p>
-<p>The messages should use <a href="https://docs.python.org/3/library/stdtypes.html#old-string-formatting">old string formatting</a> to allow for easier transpilation to languages such as C++ and Golang.</p>
-<h3 id="include-markers">Include Markers<a class="headerlink" href="#include-markers" title="Permanent link">#</a></h3>
-<p>Since we only provide a transpilation based on a subset of Python language, many operations will have to include manually defined code snippets.
-The developer should mark such spots with <a href="../general-design-decisions/#include-markers">include markers</a> using <code>NotImplementedError</code>.
-For example:</p>
-<pre><code>raise NotImplementedError('some-marker')
-</code></pre>
-<p>will make the <a href="../general-design-decisions/#code-generators">code generators</a> introduce an include marker <code>some-marker</code> in the generated code.
-The <a href="../general-design-decisions/#filler-script">filler script</a> will eventually replace the <a href="../general-design-decisions/#include-markers">include markers</a> with the corresponding code snippets written in the implementation language.</p>
 <h2 id="relation-to-json-schema-and-xml-schema-definition">Relation to <a href="https://json-schema.org/">JSON Schema</a> and <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a><a class="headerlink" href="#relation-to-json-schema-and-xml-schema-definition" title="Permanent link">#</a></h2>
 <p>We should write a separate code generator to bootstrap this scripting code based on a schema (<em>e.g.</em>, a <a href="https://json-schema.org/">JSON Schema</a>), but the schema should not be referenced in the meta-model nor available directly in code.
 There are two reasons for this decision:</p>

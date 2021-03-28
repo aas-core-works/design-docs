@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Roadmap - Design Docs for aasx-core</title>
+  <title>Simplified Python - Design Docs for aasx-core</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Roadmap";
-    var mkdocs_page_input_path = "roadmap.md";
+    var mkdocs_page_name = "Simplified Python";
+    var mkdocs_page_input_path = "simplified-python.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -55,8 +55,22 @@
                     <li class="toctree-l1"><a class="reference internal" href="../general-design-decisions/">General Design Decisions</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../simplified-python/">Simplified Python</a>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Simplified Python</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#disallowed-features">Disallowed Features</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#string-formatting">String Formatting</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#supported-language-constructs">Supported Language Constructs</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#for-loops">For-loops</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#include-markers">Include Markers</a>
+    </li>
+    </ul>
                     </li>
                 </ul>
                 <ul>
@@ -79,12 +93,8 @@
                     <li class="toctree-l1"><a class="reference internal" href="../naming-conventions/">Naming Conventions</a>
                     </li>
                 </ul>
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Roadmap</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#priority-of-supported-languages">Priority of Supported Languages</a>
-    </li>
-    </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../roadmap/">Roadmap</a>
                     </li>
                 </ul>
       </div>
@@ -108,7 +118,7 @@
     
       
     
-    <li>Roadmap</li>
+    <li>Simplified Python</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -119,29 +129,35 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="roadmap">Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">#</a></h1>
-<p>The short-term goals (say April/May 2020) are:</p>
+                <h1 id="simplified-python">Simplified Python<a class="headerlink" href="#simplified-python" title="Permanent link">#</a></h1>
+<p>We use a simplified version of Python as the universal language to be transpiled into the respective implementation languages (such as C#, Java <em>etc.</em>).
+This simple Python supports only a certain subset of language constructs and built-in functions.
+The language is used for defining <a href="../data-structures-and-operations/">data structures and operations</a>, <a href="../contracts/">contracts</a> and <a href="../deserialization-scripts/">scripting de/serialization</a>.</p>
+<p>As the scripts are not used by the wide audience, but only by the developers of the library, we intentionally decide on-the-go which Python features to support.
+Hence we only transpile a very limited subset of builtin functions and types.</p>
+<h2 id="disallowed-features">Disallowed Features<a class="headerlink" href="#disallowed-features" title="Permanent link">#</a></h2>
+<p>We allow no:</p>
 <ul>
-<li>Focus at first only on interfaces.</li>
-<li>Only generate stubs together with contracts.</li>
-<li>Support <code>Identifiable</code> and a minimal support for nesting.<ul>
-<li><code>Submodel</code>, <code>SubmodelElementCollection</code>, <code>SubmodelElement</code> and <code>Property</code> </li>
+<li>Nested functions,</li>
+<li>Context managers, and</li>
+<li>Custom intermediate classes (<em>e.g.</em>, classes which are not directly transpiled and used by the user such as <a href="../data-structures-and-operations/">data structures</a>)</li>
 </ul>
-</li>
-<li>Support file objects and blobs</li>
-</ul>
-<h2 id="priority-of-supported-languages">Priority of Supported Languages<a class="headerlink" href="#priority-of-supported-languages" title="Permanent link">#</a></h2>
-<ul>
-<li>C#, so that the library can be already used by, say, <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a>.</li>
-<li>Python, so that we test how it works with a slightly different paradigm.</li>
-<li>Java, so that enterprise people can use it.</li>
-<li>C++, so that embedded people can use it.</li>
-<li>C, so that even "niche" embedded people can use it.</li>
-<li>Golang, so that "server" people can use it.</li>
-<li>IEC611311, so that machine developers can use it.</li>
-<li>Erlang, so that "network" people can use it.</li>
-<li>Rust, for the people who use it as an alternative to C/C++.</li>
-</ul>
+<h2 id="string-formatting">String Formatting<a class="headerlink" href="#string-formatting" title="Permanent link">#</a></h2>
+<p>To facilitate the transpilation to languages such as C++ and Golang, we decide to use <a href="https://docs.python.org/3/library/stdtypes.html#old-string-formatting">old string formatting</a>:</p>
+<pre><code class="language-python">&gt;&gt;&gt; '%s has %03d quote types.' % (&quot;Python&quot;, 2))
+'Python has 002 quote types.'
+</code></pre>
+<h2 id="supported-language-constructs">Supported Language Constructs<a class="headerlink" href="#supported-language-constructs" title="Permanent link">#</a></h2>
+<h3 id="for-loops">For-loops<a class="headerlink" href="#for-loops" title="Permanent link">#</a></h3>
+<p>For-loops can loop either over lists, over maps or over <code>for _ in range(..., ...)</code> where both start and end are given as integers.</p>
+<h2 id="include-markers">Include Markers<a class="headerlink" href="#include-markers" title="Permanent link">#</a></h2>
+<p>Since we only provide a transpilation based on a subset of Python language, we will have to include manually defined code snippets at many spots.
+The developer should mark such spots with <a href="../general-design-decisions/#include-markers">include markers</a> using <code>NotImplementedError</code>.</p>
+<p>For example:</p>
+<pre><code>raise NotImplementedError('some-marker')
+</code></pre>
+<p>will make the <a href="../general-design-decisions/#code-generators">code generators</a> introduce an include marker <code>some-marker</code> in the generated code.
+The <a href="../general-design-decisions/#filler-script">filler script</a> will eventually replace the <a href="../general-design-decisions/#include-markers">include markers</a> with the corresponding code snippets written in the implementation language.</p>
               
             </div>
           </div>
@@ -149,8 +165,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../data-structures-and-operations/" class="btn btn-neutral float-right" title="Data Structures and Operations">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-        <a href="../naming-conventions/" class="btn btn-neutral" title="Naming Conventions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+        <a href="../general-design-decisions/" class="btn btn-neutral" title="General Design Decisions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -176,8 +194,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../naming-conventions/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../general-design-decisions/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../data-structures-and-operations/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

@@ -56,6 +56,10 @@
                     </li>
                 </ul>
                 <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../simplified-python/">Simplified Python</a>
+                    </li>
+                </ul>
+                <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../data-structures-and-operations/">Data Structures and Operations</a>
                     </li>
                 </ul>
@@ -64,6 +68,8 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#definition-of-contracts">Definition of Contracts</a>
         <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#identifier">Identifier</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#error-messages">Error Messages</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#severity">Severity</a>
@@ -124,7 +130,7 @@
             <div class="section">
               
                 <h1 id="code-contracts">Code Contracts<a class="headerlink" href="#code-contracts" title="Permanent link">#</a></h1>
-<p>The specification of <a href="../data-structures-and-operations/#operations">operations</a> in our <a href="../general-design-decisions/#meta-model">meta-model</a> should include the <a href="https://en.wikipedia.org/wiki/Design_by_contract">code contracts</a> such as pre-conditions and post-conditions.</p>
+<p>The specification of <a href="../data-structures-and-operations/">operations</a> in our <a href="../general-design-decisions/#meta-model">meta-model</a> should include the <a href="https://en.wikipedia.org/wiki/Design_by_contract">code contracts</a> such as pre-conditions and post-conditions.</p>
 <p>The contracts can be trivial (such as specifying a range of a property), as well as very complex expressions (the length of this list needs to be divisble by three and the first element needs to be larger than the sum of all the other elements).</p>
 <p>The <a href="../general-design-decisions/#code-generators">code generators</a> transpile contracts so that they are <strong>included in the implementation</strong>.
 This has the following benefits:
@@ -140,9 +146,29 @@ This has the following benefits:
 </li>
 </ul>
 <h2 id="definition-of-contracts">Definition of Contracts<a class="headerlink" href="#definition-of-contracts" title="Permanent link">#</a></h2>
-<p>The contracts are written in <a href="https://www.w3.org/TR/shacl/">SHACL</a> and transpiled by <a href="../general-design-decisions/#code-generators">code generators</a> into the implementation stubs..</p>
-<p>As we could <strong>not support invariants</strong> in most languages, we decide to define contracts as <strong>pre-conditions</strong> and <strong>post-conditions</strong> of <strong><a href="../data-structures-and-operations/#operations">operations</a></strong>.</p>
-<p>Each contract should be given <strong>a unique identifier</strong>.</p>
+<p>TODO (Marko &amp; Nico &amp; Robert, 2021-03-28): Discuss</p>
+<p>The contracts are written in <a href="../simplified-python/">our simplified Python</a> and transpiled by <a href="../general-design-decisions/#code-generators">code generators</a> into the implementation stubs.</p>
+<p>As we could <strong>not support invariants</strong> in most languages, we decide to define contracts as <strong>pre-conditions</strong> and <strong>post-conditions</strong> of <strong><a href="../data-structures-and-operations/">operations</a></strong>.</p>
+<p>The contracts are defined as <a href="https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Decorators">function decorators</a> on the opeartions:</p>
+<pre><code class="language-python">@require(
+    condition=lambda x, y: x &lt; y,
+    identifier=&quot;x_smaller_than_y&quot;,
+    error=lambda x, y: &quot;x (%d) must be smaller than y (%d).&quot; % (x, y),
+    severity=ALWAYS)
+@ensure(
+    condition=lambda x, y, result: result &gt; x * y,
+    identifier=&quot;result_greater_than_product&quot;,
+    error=lambda x, y, result: 
+        (&quot;result (%d) must be greater than the product (%d)&quot;
+        &quot;of x (%d) and y (%d)&quot;) % (result, x * y, x, y) 
+)
+def some_operation(x: int, y: int) -&gt; int:
+    ...
+</code></pre>
+<p>The contract decorators (<code>require</code> and <code>ensure</code>) as well as constants (such as <code>ALWAYS</code>) live in <code>aasx_core_gen.contracts</code> module.</p>
+<h3 id="identifier">Identifier<a class="headerlink" href="#identifier" title="Permanent link">#</a></h3>
+<p>Each contract must have an identifier unique to the operation.
+In implementation languages where we can not produce an error message, we will at least display the identifier to the user.</p>
 <h3 id="error-messages">Error Messages<a class="headerlink" href="#error-messages" title="Permanent link">#</a></h3>
 <p>The contracts should also include <strong>an error message</strong>.
 The error message should support <a href="https://en.wikipedia.org/wiki/Printf_format_string">printf format strings</a> so that we can include the actual offending values in the message as well.
