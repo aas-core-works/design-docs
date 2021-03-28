@@ -122,7 +122,7 @@ Additionally, when the specification of the [asset administration shell] changes
 
 ## Meta-model
 
-The meta-model is written in [RDF SHACL].
+The meta-model is a collection of documents written in different languages (such as [RDF SHACL] or our reduced version of Python, depending on the nature of the respective document).
 
 [RDF SHACL]: https://www.w3.org/TR/shacl/
 

@@ -5,18 +5,11 @@ For example, once we implemented the deserialization of JSON in C#, it will be m
 
 (*2021-03-26: Functional languages are an exception here, but that is a problem we abstract away at the moment.*)
 
-Instead, we propose to specify the de-serialization and serialization in a meta-language as a **de/serialization script**.
+Instead, we propose to specify the de-serialization and serialization in [our simplified Python] as a **de/serialization script**.
 A de/serialization script is then **transpiled** by the [code generators] into the respective implementation of the library.
 
+[our simplified Python]: simplified-python.md
 [code generators]: general-design-decisions.md#code-generators
-
-## Scripting Language
-
-We use a subset of Python language to script the de/serialization.
-
-As the de/serialization scripts are not used by the wide audience, but only by the developers of the library, we intentionally decide on-the-go which Python features to support.
-Hence we only transpile a very limited subset of builtin functions and types.
-For example, we allow no nested functions, classes or context managers.
 
 ### Operations
 
@@ -41,33 +34,9 @@ Additionally, special commands and queries such as `is_int32`, `is_int64`, …, 
 Functions such as `x = local_int32(0)` are used to instantiate local variables.
 These special commands and queries are implemented in a separate module, say, `aasx_core_gen.de_serialization`.
 
-### Supported Language Constructs
-
-For-loops can loop either over lists, over maps or over `for _ in range(..., ...)` where both start and end are given as integers.
-
 ### Error Messages
 
 The errors should be reported using pre-defined functions `error(message: str, path: pathlib.Path)`.
-
-The messages should use [old string formatting] to allow for easier transpilation to languages such as C++ and Golang.
-
-[old string formatting]: https://docs.python.org/3/library/stdtypes.html#old-string-formatting
-
-### Include Markers
-
-Since we only provide a transpilation based on a subset of Python language, many operations will have to include manually defined code snippets.
-The developer should mark such spots with [include markers] using `NotImplementedError`.
-For example:
-
-```
-raise NotImplementedError('some-marker')
-```
-
-will make the [code generators] introduce an include marker `some-marker` in the generated code.
-The [filler script] will eventually replace the [include markers] with the corresponding code snippets written in the implementation language.
-
-[include markers]: general-design-decisions.md#include-markers
-[filler script]: general-design-decisions.md#filler-script
 
 ## Relation to [JSON Schema] and [XML Schema Definition]
 
@@ -91,9 +60,7 @@ This is clearly tedious, but we found no easy way around it.
 
 [diff]: https://en.wikipedia.org/wiki/Diff
 
-
 ![Workflow](deserialization-scripts/workflow.svg)
-
 
 ## Implementation Considerations
 

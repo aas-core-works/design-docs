@@ -2,6 +2,7 @@ site_name: Design Docs for aasx-core
 nav:
     - Home: index.md
     - General Design Decisions: general-design-decisions.md
+    - Simplified Python: simplified-python.md
     - Data Structures and Operations: data-structures-and-operations.md
     - Code Contracts: contracts.md
     - De/serialization Scripts: deserialization-scripts.md

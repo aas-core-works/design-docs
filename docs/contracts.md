@@ -2,7 +2,7 @@
 
 The specification of [operations] in our [meta-model] should include the [code contracts] such as pre-conditions and post-conditions.
 
-[operations]: data-structures-and-operations.md#operations
+[operations]: data-structures-and-operations.md
 [meta-model]: general-design-decisions.md#meta-model
 [code contracts]: https://en.wikipedia.org/wiki/Design_by_contract
 [SHACL]: https://www.w3.org/TR/shacl/
@@ -25,11 +25,41 @@ This has the following benefits:
 
 ## Definition of Contracts
 
-The contracts are written in [SHACL] and transpiled by [code generators] into the implementation stubs..
+TODO (Marko & Nico & Robert, 2021-03-28): Discuss
+
+The contracts are written in [our simplified Python] and transpiled by [code generators] into the implementation stubs.
+
+[our simplified Python]: simplified-python.md
 
 As we could **not support invariants** in most languages, we decide to define contracts as **pre-conditions** and **post-conditions** of **[operations]**.
 
-Each contract should be given **a unique identifier**.
+The contracts are defined as [function decorators] on the opeartions:
+
+[function decorators]: https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Decorators
+
+```python
+@require(
+    condition=lambda x, y: x < y,
+    identifier="x_smaller_than_y",
+    error=lambda x, y: "x (%d) must be smaller than y (%d)." % (x, y),
+    severity=ALWAYS)
+@ensure(
+    condition=lambda x, y, result: result > x * y,
+    identifier="result_greater_than_product",
+    error=lambda x, y, result: 
+        ("result (%d) must be greater than the product (%d)"
+        "of x (%d) and y (%d)") % (result, x * y, x, y) 
+)
+def some_operation(x: int, y: int) -> int:
+    ...
+```
+
+The contract decorators (`require` and `ensure`) as well as constants (such as `ALWAYS`) live in `aasx_core_gen.contracts` module.
+
+### Identifier
+
+Each contract must have an identifier unique to the operation.
+In implementation languages where we can not produce an error message, we will at least display the identifier to the user.
 
 ### Error Messages
 
