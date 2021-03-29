@@ -72,6 +72,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#error-messages">Error Messages</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error-type">Error Type</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#severity">Severity</a>
     </li>
         </ul>
@@ -153,14 +155,18 @@ This has the following benefits:
 <pre><code class="language-python">@require(
     condition=lambda x, y: x &lt; y,
     identifier=&quot;x_smaller_than_y&quot;,
-    error=lambda x, y: &quot;x (%d) must be smaller than y (%d).&quot; % (x, y),
-    severity=ALWAYS)
+    error=lambda x, y: &quot;x (%d) must be smaller than y (%d).&quot; % (
+        x, y),
+    severity=ALWAYS,
+    error_type=ValueError)
 @ensure(
     condition=lambda x, y, result: result &gt; x * y,
     identifier=&quot;result_greater_than_product&quot;,
     error=lambda x, y, result: 
         (&quot;result (%d) must be greater than the product (%d)&quot;
-        &quot;of x (%d) and y (%d)&quot;) % (result, x * y, x, y) 
+        &quot;of x (%d) and y (%d)&quot;) % (result, x * y, x, y),
+    severity=DEBUG,
+    error_type=AssertionError 
 )
 def some_operation(x: int, y: int) -&gt; int:
     ...
@@ -169,10 +175,22 @@ def some_operation(x: int, y: int) -&gt; int:
 <h3 id="identifier">Identifier<a class="headerlink" href="#identifier" title="Permanent link">#</a></h3>
 <p>Each contract must have an identifier unique to the operation.
 In implementation languages where we can not produce an error message, we will at least display the identifier to the user.</p>
+<p>If the identifier is omitted, it equals the body of the condition lambda function.</p>
 <h3 id="error-messages">Error Messages<a class="headerlink" href="#error-messages" title="Permanent link">#</a></h3>
 <p>The contracts should also include <strong>an error message</strong>.
 The error message should support <a href="https://en.wikipedia.org/wiki/Printf_format_string">printf format strings</a> so that we can include the actual offending values in the message as well.
 This is important for contracts which are enforced <strong>in production</strong> catching <strong>rare and hard-to-reproduce bugs</strong>.</p>
+<p>If the error message is omitted, the code generator will try to infer the format string based on the types of the arguments of the contract condition.</p>
+<h3 id="error-type">Error Type<a class="headerlink" href="#error-type" title="Permanent link">#</a></h3>
+<p>While some languages, such as Golang, panic on contract violation, other languages such as Python and C# allow us to distinguish between the types of errors on contract violation.
+We represent the error types by using subclasses of Python <code>Exception</code>:</p>
+<ul>
+<li><code>ValueError</code> for violations where the caller supplied invalid arguments.
+  This error is mapped to <code>System.InvalidArgumentError</code> in C# or <code>std::invalid_argument</code> in C++.</li>
+<li><code>AssertionError</code> for logical errors (<em>e.g.</em>, operation called on the invalid state of the object). 
+  This error is mapped to <code>System.InvalidOperationException</code> in C# and <code>std::logic_error</code> in C++.</li>
+</ul>
+<p>The default is <code>AssertionError</code>.</p>
 <h3 id="severity">Severity<a class="headerlink" href="#severity" title="Permanent link">#</a></h3>
 <p>Each contract is given a  <strong>severity</strong> which determines when it is enforced:</p>
 <ul>
@@ -183,7 +201,7 @@ This is important for contracts which are enforced <strong>in production</strong
   <br>
   This allows us to enforce contracts with exploding computational complexity.</li>
 </ul>
-<p>For example, most post-conditions have the severity <code>DEBUG</code>.</p>
+<p>The default for pre-conditions is <code>ALWAYS</code>, while it is <code>DEBUG</code> for post-conditions.</p>
 <h2 id="contracts-and-serialization">Contracts and Serialization<a class="headerlink" href="#contracts-and-serialization" title="Permanent link">#</a></h2>
 <p>The contracts are a tool for improving the <a href="https://en.wikipedia.org/wiki/Correctness_(computer_science)">correctness</a> of the code.
 They are not meant to be used as validation of the input (<em>e.g.</em>, a JSON file to be imported).</p>
