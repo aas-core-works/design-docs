@@ -41,14 +41,18 @@ The contracts are defined as [function decorators] on the opeartions:
 @require(
     condition=lambda x, y: x < y,
     identifier="x_smaller_than_y",
-    error=lambda x, y: "x (%d) must be smaller than y (%d)." % (x, y),
-    severity=ALWAYS)
+    error=lambda x, y: "x (%d) must be smaller than y (%d)." % (
+        x, y),
+    severity=ALWAYS,
+    error_type=ValueError)
 @ensure(
     condition=lambda x, y, result: result > x * y,
     identifier="result_greater_than_product",
     error=lambda x, y, result: 
         ("result (%d) must be greater than the product (%d)"
-        "of x (%d) and y (%d)") % (result, x * y, x, y) 
+        "of x (%d) and y (%d)") % (result, x * y, x, y),
+    severity=DEBUG,
+    error_type=AssertionError 
 )
 def some_operation(x: int, y: int) -> int:
     ...
@@ -61,13 +65,29 @@ The contract decorators (`require` and `ensure`) as well as constants (such as `
 Each contract must have an identifier unique to the operation.
 In implementation languages where we can not produce an error message, we will at least display the identifier to the user.
 
+If the identifier is omitted, it equals the body of the condition lambda function.
+
 ### Error Messages
 
 The contracts should also include **an error message**.
 The error message should support [printf format strings] so that we can include the actual offending values in the message as well.
 This is important for contracts which are enforced **in production** catching **rare and hard-to-reproduce bugs**.
 
+If the error message is omitted, the code generator will try to infer the format string based on the types of the arguments of the contract condition.
+
 [printf format strings]: https://en.wikipedia.org/wiki/Printf_format_string
+
+### Error Type
+
+While some languages, such as Golang, panic on contract violation, other languages such as Python and C# allow us to distinguish between the types of errors on contract violation.
+We represent the error types by using subclasses of Python `Exception`:
+
+* `ValueError` for violations where the caller supplied invalid arguments.
+  This error is mapped to `System.InvalidArgumentError` in C# or `std::invalid_argument` in C++.
+* `AssertionError` for logical errors (*e.g.*, operation called on the invalid state of the object). 
+  This error is mapped to `System.InvalidOperationException` in C# and `std::logic_error` in C++.
+
+The default is `AssertionError`.
 
 ### Severity
 
@@ -80,7 +100,7 @@ Each contract is given a  **severity** which determines when it is enforced:
   <br>
   This allows us to enforce contracts with exploding computational complexity.
 
-For example, most post-conditions have the severity `DEBUG`.
+The default for pre-conditions is `ALWAYS`, while it is `DEBUG` for post-conditions.
 
 ## Contracts and Serialization
 
