@@ -2,7 +2,7 @@
 
 This collection of documents captures the design decisions we made while discussing and designing the aasx-core library.
 
-The documentation is available on https://admin-shell-io.github.io/aasx-core-design-docs/.
+The documentation is available on https://aasx-core-works.github.io/design-docs/.
 
 ## A Note about Validity
 
