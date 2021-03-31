@@ -41,6 +41,10 @@ For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.
 [aasx-server]: https://github.com/admin-shell-io/aasx-server
 [AASX Package Explorer]: https://github.com/admin-shell-io/aasx-package-explorer
 
+## Relation to Other Projects
+
+![Relation to other projects](general-design-decisions/relation-to-other-projects.svg)
+
 ## Requirements
 
 * The library should be provided in **many programming languages**.<br>
