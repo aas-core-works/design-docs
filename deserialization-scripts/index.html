@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>De/serialization Scripts - Design Docs for aasx-core</title>
+  <title>De/serialization Scripts - Design Docs for aas-core</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -38,7 +38,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-        <a href=".." class="icon icon-home"> Design Docs for aasx-core</a>
+        <a href=".." class="icon icon-home"> Design Docs for aas-core</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
@@ -114,7 +114,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="..">Design Docs for aasx-core</a>
+        <a href="..">Design Docs for aas-core</a>
       </nav>
 
       
@@ -157,7 +157,7 @@ The function operates on a <code>jsonable</code>, the corresponding object to wh
 <p>It is assumed that the de/serialization script can <strong>access the operations and the data structures of our library</strong> (such as <code>Submodel</code> in the aforementioned example).</p>
 <p>Additionally, special commands and queries such as <code>is_int32</code>, <code>is_int64</code>, …, <code>as_int32</code>, <code>as_int64</code>, <code>as_float32</code>, <code>as_float64</code>, <code>as_list</code> and <code>as_map</code> are provided to implement the logic.
 Functions such as <code>x = local_int32(0)</code> are used to instantiate local variables.
-These special commands and queries are implemented in a separate module, say, <code>aasx_core_gen.de_serialization</code>.</p>
+These special commands and queries are implemented in a separate module, say, <code>aas_core_gen.de_serialization</code>.</p>
 <h3 id="error-messages">Error Messages<a class="headerlink" href="#error-messages" title="Permanent link">#</a></h3>
 <p>The errors should be reported using pre-defined functions <code>error(message: str, path: pathlib.Path)</code>.</p>
 <h2 id="relation-to-json-schema-and-xml-schema-definition">Relation to <a href="https://json-schema.org/">JSON Schema</a> and <a href="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XML Schema Definition</a><a class="headerlink" href="#relation-to-json-schema-and-xml-schema-definition" title="Permanent link">#</a></h2>

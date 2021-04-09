@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>General Design Decisions - Design Docs for aasx-core</title>
+  <title>General Design Decisions - Design Docs for aas-core</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -38,7 +38,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-        <a href=".." class="icon icon-home"> Design Docs for aasx-core</a>
+        <a href=".." class="icon icon-home"> Design Docs for aas-core</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
@@ -116,7 +116,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="..">Design Docs for aasx-core</a>
+        <a href="..">Design Docs for aas-core</a>
       </nav>
 
       
@@ -148,18 +148,26 @@
 <p>We embrace <strong>stability</strong> and <strong>long-term support</strong> instead of  <strong>experimental features</strong>.</p>
 <p>The library should be <strong>minimalistic</strong> (as opposed to large  enterprise systems).</p>
 <p>The library should provide base for a rich <strong>toolkit</strong> built on top of it.
-For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.</p>
+For example, generators such as aas-to-grpc or aas-to-opc-ua-server.</p>
 <h2 id="out-of-scope">Out-of-Scope<a class="headerlink" href="#out-of-scope" title="Permanent link">#</a></h2>
 <ul>
 <li>The <strong>component manager</strong>, the "active" part of the shell, is out-of-scope.<br>
   <br>
-  This is the responsability of other components such as <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a>.<br>
+  This is the responsibility of other components such as <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a>.<br>
   <br></li>
-<li>The <strong>thread-safe operations</strong> and <strong>ACID transactions</strong> are out-of-scope.<br>
+<li>
+<p>The library should not provide read/write operations on <strong>AASX files</strong>.<br>
+  <br>
+  A separate library, aas-package, should take care of that.
+  <br></p>
+</li>
+<li>
+<p>The <strong>thread-safe operations</strong> and <strong>ACID transactions</strong> are out-of-scope.<br>
   <br>
   The locking as well as write-ahead logs are left to the user.
   A different library, aasx-db (yet to be created), will provide such functionality.<br>
-  <br></li>
+  <br></p>
+</li>
 <li>We expect the data model of an <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> to <strong>fit in memory</strong>.<br>
   <br>
   Otherwise, components such as <a href="https://github.com/admin-shell-io/aasx-server">aasx-server</a> and aasx-db (yet to be created) should be used.<br>
@@ -191,10 +199,6 @@ For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.</p>
 <li>The implementations should be in <strong>native code</strong> (instead of wrapping, say, C++ code).<br>
   <br>
   This allows language-specific power features such as reflection.<br>
-  <br></li>
-<li>The library should provide read/write operations on <strong>AASX files</strong>.<br>
-  <br>
-  This means that blobs and packaged files should be readable/writable, but no additional features on the blobs should be made available.<br>
   <br></li>
 <li>The library should provide <strong>import/export for JSON and XML</strong>.<br>
   <br>
@@ -232,7 +236,7 @@ For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.</p>
   <br></li>
 <li>The user <strong>should not use constructors</strong> to create objects.<br>
   <br>
-  We want to keep migrations between aasx-core and aasx-db (its thread-safe pendant based on transactions) as effortless as possible.
+  We want to keep migrations between aas-core and aasx-db (its thread-safe pendant based on transactions) as effortless as possible.
   Since aasx-db is an <em>object-oriented database</em>, it needs to keep track of the objects and their state.
   Therefore, constructors need to be handled through factory methods to prepare for a future migration to aasx-db.<br>
   <br></li>
@@ -274,14 +278,14 @@ A <strong>filler script</strong> is provided to replace the include markers with
 <p><img alt="Include markers" src="include-markers.svg" /></p>
 <p>(<em>mristin 2021-03-26: It remains to be seen if we need a filler script per language, or one for the whole library.</em>)</p>
 <h2 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">#</a></h2>
-<p>The base name is <code>aasx-core</code>.</p>
+<p>The base name is <code>aas-core</code>.</p>
 <p>We use the schema:</p>
-<pre><code>aasx-core{AAS version}-{language version}-{optional runtime version}
+<pre><code>aas-core{AAS version}-{language version}-{optional runtime version}
 </code></pre>
 <p>For example:</p>
 <ul>
-<li><code>aasx-core2-java15</code> is the aasx-core library supporting the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> version 2 and Java 15.</li>
-<li>Analogously, <code>aasx-core3-csharp8-dotnet5</code> is the aasx-core library supporting the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> version 3, C# version 8 and the runtime .NET 5.</li>
+<li><code>aas-core2-java15</code> is the aas-core library supporting the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> version 2 and Java 15.</li>
+<li>Analogously, <code>aas-core3-csharp8-dotnet5</code> is the aas-core library supporting the specification of the <a href="https://www.plattform-i40.de/PI40/Redaktion/DE/Downloads/Publikation/Details_of_the_Asset_Administration_Shell_Part1_V3.html">asset administration shell</a> version 3, C# version 8 and the runtime .NET 5.</li>
 </ul>
 <p>We follow <a href="http://semver.org/spec/v1.0.0.html">Semantic Versioning</a> for the versioning of the library.
 The version X.Y.Z indicates:</p>
@@ -290,7 +294,7 @@ The version X.Y.Z indicates:</p>
 <li>Y is the minor version (backward-compatible), and</li>
 <li>Z is the patch version (backward-compatible bug fix).</li>
 </ul>
-<p>Here is an example of a full identifier: <code>aasx-core5-python38 1.43.4</code>.</p>
+<p>Here is an example of a full identifier: <code>aas-core5-python38 1.43.4</code>.</p>
               
             </div>
           </div>
