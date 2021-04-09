@@ -17,14 +17,19 @@ We embrace **stability** and **long-term support** instead of  **experimental fe
 The library should be **minimalistic** (as opposed to large  enterprise systems).
 
 The library should provide base for a rich **toolkit** built on top of it.
-For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.
+For example, generators such as aas-to-grpc or aas-to-opc-ua-server.
 
 ## Out-of-Scope
 
 * The **component manager**, the "active" part of the shell, is out-of-scope.<br>
   <br>
-  This is the responsability of other components such as [aasx-server].<br>
+  This is the responsibility of other components such as [aasx-server].<br>
   <br>
+* The library should not provide read/write operations on **AASX files**.<br>
+  <br>
+  A separate library, aas-package, should take care of that.
+  <br>
+
 * The **thread-safe operations** and **ACID transactions** are out-of-scope.<br>
   <br>
   The locking as well as write-ahead logs are left to the user.
@@ -67,10 +72,6 @@ For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.
   <br>
   This allows language-specific power features such as reflection.<br>
   <br>
-* The library should provide read/write operations on **AASX files**.<br>
-  <br>
-  This means that blobs and packaged files should be readable/writable, but no additional features on the blobs should be made available.<br>
-  <br>
 * The library should provide **import/export for JSON and XML**.<br>
   <br>
   Other formats such as AutomationML and RDF are not supported out-of-the-box.
@@ -103,7 +104,7 @@ For example, generators such as aasx-to-grpc or aasx-to-opc-ua-server.
   <br>
 * The user **should not use constructors** to create objects.<br>
   <br>
-  We want to keep migrations between aasx-core and aasx-db (its thread-safe pendant based on transactions) as effortless as possible.
+  We want to keep migrations between aas-core and aasx-db (its thread-safe pendant based on transactions) as effortless as possible.
   Since aasx-db is an *object-oriented database*, it needs to keep track of the objects and their state.
   Therefore, constructors need to be handled through factory methods to prepare for a future migration to aasx-db.<br>
   <br>
@@ -178,18 +179,18 @@ Each include marker is globally uniquely identified.
 
 ## Versioning
 
-The base name is `aasx-core`.
+The base name is `aas-core`.
 
 We use the schema:
 
 ```
-aasx-core{AAS version}-{language version}-{optional runtime version}
+aas-core{AAS version}-{language version}-{optional runtime version}
 ```
 
 For example:
 
-* `aasx-core2-java15` is the aasx-core library supporting the specification of the [asset administration shell] version 2 and Java 15.
-* Analogously, `aasx-core3-csharp8-dotnet5` is the aasx-core library supporting the specification of the [asset administration shell] version 3, C# version 8 and the runtime .NET 5.
+* `aas-core2-java15` is the aas-core library supporting the specification of the [asset administration shell] version 2 and Java 15.
+* Analogously, `aas-core3-csharp8-dotnet5` is the aas-core library supporting the specification of the [asset administration shell] version 3, C# version 8 and the runtime .NET 5.
 
 We follow [Semantic Versioning] for the versioning of the library.
 The version X.Y.Z indicates:
@@ -200,5 +201,4 @@ The version X.Y.Z indicates:
 
 [Semantic Versioning]: http://semver.org/spec/v1.0.0.html
 
-Here is an example of a full identifier: `aasx-core5-python38 1.43.4`.
-
+Here is an example of a full identifier: `aas-core5-python38 1.43.4`.

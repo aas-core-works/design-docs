@@ -32,7 +32,7 @@ It is assumed that the de/serialization script can **access the operations and t
 
 Additionally, special commands and queries such as `is_int32`, `is_int64`, …, `as_int32`, `as_int64`, `as_float32`, `as_float64`, `as_list` and `as_map` are provided to implement the logic.
 Functions such as `x = local_int32(0)` are used to instantiate local variables.
-These special commands and queries are implemented in a separate module, say, `aasx_core_gen.de_serialization`.
+These special commands and queries are implemented in a separate module, say, `aas_core_gen.de_serialization`.
 
 ### Error Messages
 

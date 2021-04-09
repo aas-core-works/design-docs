@@ -58,7 +58,7 @@ def some_operation(x: int, y: int) -> int:
     ...
 ```
 
-The contract decorators (`require` and `ensure`) as well as constants (such as `ALWAYS`) live in `aasx_core_gen.contracts` module.
+The contract decorators (`require` and `ensure`) as well as constants (such as `ALWAYS`) live in `aas_core_gen.contracts` module.
 
 ### Identifier
 
