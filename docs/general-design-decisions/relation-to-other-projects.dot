@@ -1,15 +1,17 @@
 digraph G {
     aasx_db [label="aasx-db", shape=box]
+    aas_package [label="aas-package", shape=box]
     aasx_server [label="aasx-server", shape=box]
     aasx_package_explorer [label="AASX Package Explorer", shape=box]
-    aasx_core [label="aasx-core", shape=box]
+    aas_core [label="aas-core", shape=box]
     aasx_to_grpc [label="aasx-to-grpc\n(and other tools)", shape=box]
     embedded_software [label="embedded software", shape=box]
 
-    aasx_db -> aasx_core [label="interface"]
-    aasx_server -> aasx_core [label="first step"]
+    aasx_db -> aas_core [label="interface"]
+    aas_package -> aas_core [label="data.*"]
+    aasx_server -> aas_core [label="first step"]
     aasx_server -> aasx_db [label="second step"]
-    aasx_to_grpc -> aasx_core [label=" data model"]
-    aasx_package_explorer -> aasx_core [label=" data model"]
-    embedded_software -> aasx_core [label=" data model"]
+    aasx_to_grpc -> aas_core [label=" data model"]
+    aasx_package_explorer -> aas_core [label=" data model"]
+    embedded_software -> aas_core [label=" data model"]
 }

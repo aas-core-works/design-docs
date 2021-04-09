@@ -1,8 +1,8 @@
-# Design Docs for aasx-core
+# Design Docs for aas-core
 
-This collection of documents captures the design decisions we made while discussing and designing the aasx-core library.
+This collection of documents captures the design decisions we made while discussing and designing the aas-core library.
 
-The documentation is available on https://aasx-core-works.github.io/design-docs/.
+The documentation is available on https://aas-core-works.github.io/design-docs/.
 
 ## A Note about Validity
 

@@ -1,4 +1,4 @@
-site_name: Design Docs for aasx-core
+site_name: Design Docs for aas-core
 nav:
     - Home: index.md
     - General Design Decisions: general-design-decisions.md
